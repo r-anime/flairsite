@@ -1,0 +1,36 @@
+{% extends "account/base.html" %}
+
+{% load account socialaccount %}
+
+{% block title %}{{ block.super }} - Log In{% endblock %}
+
+{% block content %}
+
+{% get_providers as socialaccount_providers %}
+{% if socialaccount_providers %}
+{% for provider in socialaccount_providers %}
+{% if provider.id == "reddit" %}
+<div class="row pt-5 justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <h5 class="card-header">
+                Authenticate
+            </h5>
+            <div class="card-body">
+                <p class="card-text">
+                    In a moment you will be redirected to reddit to verify your username. Then you can set your flair.
+                </p>
+                <a title="{{ provider.name }}" class="btn btn-primary" href="{% provider_login_url provider.id process="login" scope=scope auth_params=auth_params %}">
+                    Authenticate via Reddit
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+{% else %}
+Error: No SocialAccount Providers found.
+{% endif %}
+
+{% endblock %}

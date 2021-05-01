@@ -1,0 +1,54 @@
+{% extends "account/base.html" %}
+
+{% block title %}{{ block.super }} - Set flair{% endblock %}
+
+{% block content %}
+
+Setting flair for: {% load account %}{% user_display user %} {% load account socialaccount %}
+<br>
+Current flair is: {{current_flair}}
+
+
+<form action="/flair/submit" method="post">
+    {% csrf_token %}
+
+    <input type="submit" value="Reset Flair" name="flair_reset_request">
+
+    <h3>Please select your flair:</h3>
+
+    <input type="radio" id="notracker" name="defaultflair" value="notracker">
+    <label for="notracker">No Tracker</label><br>
+
+    {% for flairtype in default_flairs %}
+        {% if flairtype.flair_type == "default" %}
+            <img src="{{flairtype.static_image}}">
+            <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}">
+            <label for="{{flairtype.display_name}}">{{flairtype.display_name}}</label><br>
+            <br>
+        {% endif %}
+    {% endfor %}
+
+    <label for="trackerAccountName">Account Name</label><br>
+    <input type="text" id="trackerAccountName" name="trackerAccountName" value="" maxlength="20"><br>
+
+
+
+    {%if allowed_flairs %}
+        <!-- only display award flairs if they have any  -->
+        <br>
+        <h3>Select any number of additional awarded flairs:</h3>
+
+        {% for flairtype in allowed_flairs %}
+            <img src="{{flairtype.flair_id.static_image}}">
+            <input type="checkbox" id="flairChoice{{flairtype.flair_id.id}}" name="flairtype_{{flairtype.flair_id.display_name}}" value="{{flairtype.flair_id.display_name}}">
+            <label for="flairChoice{{flairtype.flair_id.id}}">{{flairtype.flair_id}}</label><br>
+        {% endfor %}
+    {% endif %}
+
+
+    <br>
+    <input type="submit" value="Submit" name="flair_change_request">
+</form>
+
+
+{% endblock %}

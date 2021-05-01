@@ -1,0 +1,48 @@
+# Pycharm #
+.idea/*
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+*.sqlite3
+media
+files/
+!*/files/
+static/
+!*/static/
+cache/*.djcache
+*.tsv
+
+# Backup files #
+*.bak
+
+# Python #
+*.py[cod]
+*$py.class
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/

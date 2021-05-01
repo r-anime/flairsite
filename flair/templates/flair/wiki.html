@@ -1,0 +1,47 @@
+{% extends "account/base.html" %}
+
+{% load static %}
+
+{% block title %}{{ block.super }} - Flair Wiki{% endblock %}
+
+{% block content %}
+
+
+<br>
+<h1>Flair Wiki</h1>
+<br>
+
+
+<!--Default Flairs-->
+<h3>Default Anime Tracking Flairs</h3>
+
+{% for flairtype in wiki_flairs %}
+    {% if flairtype.flair_type == "default" %}
+        {{flairtype.wiki_text}}
+
+        <li class="nav-item active">
+            <img src="{{flairtype.static_image}}">
+        </li>
+        <br>
+    {% endif %}
+{% endfor %}
+
+<!--Awarded Flairs-->
+
+<h3>Flair Rewards</h3>
+
+{% for flairtype in wiki_flairs %}
+    {% if flairtype.flair_type == "award" %}
+        {{flairtype.wiki_text}}
+
+        <li class="nav-item active">
+            <img src="{{flairtype.static_image}}">
+        </li>
+        <br>
+    {% endif %}
+{% endfor %}
+
+<!--Other Types-->
+
+
+{% endblock %}
