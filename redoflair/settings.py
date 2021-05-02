@@ -84,7 +84,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 3
+SITE_ID = os.environ.get('SITE_ID')
 
 
 SOCIALACCOUNT_PROVIDERS = {
