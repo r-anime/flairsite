@@ -27,14 +27,14 @@ You can make apps on Reddit [here](https://www.reddit.com/prefs/apps) for a logg
 
 * Copy template.env to .env and set the environment variables:
     * `DJANGO_SECRET_KEY` should be a strong, secure [secret key](https://docs.djangoproject.com/en/3.1/ref/settings/#secret-key) for Django.
-    * `REDDIT_CLIENT_ID` Reddit Script Credentials
-    * `REDDIT_SECRET` Reddit Script Credentials
-    * `REDDIT_USERNAME` Reddit Script Credentials
-    * `REDDIT_USER_PASSWORD` Reddit Script Credentials
+    * `REDDIT_CLIENT_ID` Reddit Script Credentials.
+    * `REDDIT_SECRET` Reddit Script Credentials.
+    * `REDDIT_USERNAME` Reddit Script Credentials.
+    * `REDDIT_USER_PASSWORD` Reddit Script Credentials.
     * `SUBREDDIT_NAME_TO_ACT_ON` The subreddit that the project will edit flairs on.
-    * `WEBSITE_REDDIT_OAUTH_CLIENT_ID` OAuth Web App Credentials
-    * `WEBSITE_REDDIT_OAUTH_SECRET` OAuth Web App Credentials
-    * `DEBUG` Website should be in debug mode not.
+    * `WEBSITE_REDDIT_OAUTH_CLIENT_ID` OAuth Web App Credentials.
+    * `WEBSITE_REDDIT_OAUTH_SECRET` OAuth Web App Credentials.
+    * `DEBUG` Sets the website in debug mode or not.
     
 * Create the website's database: `python manage.py migrate`.
 * Add your host/domain name(s) to the `django_site` table of the generated database.
