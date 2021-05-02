@@ -98,7 +98,8 @@ def check_user_exists(username):
     try:
         reddit.redditor(username).id
     except NotFound:
-        print("Aborting flair action, Reddit Username not found for: " + username)
+        print("Aborting flair action, Reddit Username not found for: ")
+        print(username)
         # TODO: Log an error or something
         return False
     return True

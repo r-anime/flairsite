@@ -35,10 +35,17 @@ You can make apps on Reddit [here](https://www.reddit.com/prefs/apps) for a logg
     * `WEBSITE_REDDIT_OAUTH_CLIENT_ID` OAuth Web App Credentials.
     * `WEBSITE_REDDIT_OAUTH_SECRET` OAuth Web App Credentials.
     * `DEBUG` Sets the website in debug mode or not.
-    
+
 * Create the website's database: `python manage.py migrate`.
-* Add your host/domain name(s) to the `django_site` table of the generated database.
 * Create a superuser for the website: `python manage.py createsuperuser`.
-* [Setup emoji on your subreddit.](https://mods.reddithelp.com/hc/en-us/articles/360010560371-Emojis)
-* [Setup flair templates on your subreddit](https://mods.reddithelp.com/hc/en-us/articles/360010541651-User-Flair)
-* Start setting up flairs in the website's database.
+* Run the server with: `manage.py runserver`
+* Connect to admin interface server at: `http://127.0.0.1:8000/admin/`
+* Add your host/domain name(s) to `Sites` on the admin page (`.../admin/sites/site/`).
+* Configure a Social application on the admin page (`.../admin/socialaccount/socialapp/`) for Reddit. Get that URI right http/https matters.
+* Start setting up flairs in the website's database:
+  * [Setup emoji on your subreddit.](https://mods.reddithelp.com/hc/en-us/articles/360010560371-Emojis)
+  * [Setup flair templates on your subreddit](https://mods.reddithelp.com/hc/en-us/articles/360010541651-User-Flair)
+  * Use the admin page to setup a `Flair type` you will use your setup emoji and template from the above two steps. [Example](https://i.imgur.com/XAvboSA.png)
+  * Setup a `Flair type` with an `award` `Flair Type` and then award that flair in `Flairs awardeds`, note the reddit username is case sensitive 
+* Go to the flair site and login as a reddit user, test the set (`.../flair/set`) and wiki pages (`.../wiki`)
+* You should now be able to see the loaded flairs and set them.
