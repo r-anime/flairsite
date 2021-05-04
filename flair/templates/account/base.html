@@ -15,8 +15,13 @@
     <meta name="msapplication-config" content="{% static '/favicon/browserconfig.xml' %}">
     <meta name="theme-color" content="#4b88df">
 
+        <!-- Required for Bootstrap collapsing menus-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
     <!-- Load required Bootstrap and BootstrapVue CSS -->
-    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap@4.5.3/dist/css/bootstrap.min.css" /> <!--We may want to delete this one -->
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css" />
 
     <!-- Load polyfills to support older browsers -->
@@ -31,6 +36,10 @@
     <!-- Load the following for BootstrapVueIcons support -->
     <script src="//unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue-icons.min.js"></script>
 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static '/styles/base.css' %}">
+
     {% block head %}
     {% endblock head %}
 
@@ -39,20 +48,29 @@
 
 <body>
     <!-- header -->
-    <b-navbar toggleable="md" type="light" variant="light" id="navbar" sticky>
-        <a class="navbar-brand" href="/flair/set">Set Flair</a>
-        <a class="navbar-brand" href="/flair/wiki">Flair Wiki</a>
-        <a class="navbar-brand" href="https://www.reddit.com/r/anime">Return to /r/anime</a>
+    <b-navbar toggleable="md" id="navbar">
+        <a class="navbar-brand" href="#">r/anime</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" href="#">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <div class="ml-auto mr-1 flex-grow-0" id="navbarSupportedContent">
-            <ul class="navbar-nav text-right">
-                <li class="nav-item active">
-                    <a href="https://github.com/r-anime/"> <img src="{% static 'github/GitHub-Mark-32px.png' %}" alt="GitHub"></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="https://github.com/r-anime/">GitHub</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link nav-white-text nav-transform-scale"href="/flair/set">Set Flair</a></li>
+                <li class="nav-item"><a class="nav-link nav-white-text nav-transform-scale" href="/flair/wiki">Flair Wiki</a></li>
+                <!-- TODO: Github logo should be white -->
+                <li class="nav-item">
+                    <a class="navbar-brand" id="github-link" href="https://github.com/r-anime/">
+                        <span class="nav-white-text">Github</span>
+                        <img class="d-inline-block align-top" src="{% static 'github/GitHub-Mark-32px.png' %}" alt="GitHub">
+                    </a>
                 </li>
             </ul>
+            <div class="ml-auto text-right">
+                <div class="nav-white-text">Currently logged in as <span class="nav-bold-text">{% load account %}{% user_display user %} {% load account socialaccount %}</span></div>
+                <!-- TODO: Add functionality to logout -->
+                <a class="nav-white-text" id="logout-btn">Log out</a>
+            </div>
         </div>
     </b-navbar>
     <!-- end header -->

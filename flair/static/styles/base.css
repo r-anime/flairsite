@@ -1,0 +1,42 @@
+/* Nav bar styles */
+#navbar {
+    background-color: #6A9EE5;
+}
+
+.nav-light {
+    color:white;
+}
+/*Select all the pieces of text in the nav bar*/
+.nav-white-text, .navbar-nav .nav-link.nav-white-text {
+    color: white;
+    font-weight: 400;
+}
+
+.navbar-nav .nav-link.nav-white-text:hover {
+    color: white;
+}
+
+.nav-transform-scale:hover{
+    transform: scale(1.1,1.1);
+}
+
+.nav-bold-text {
+    font-weight: 700;
+}
+
+/* Individual navbar components */
+
+#logout-btn {
+    font-weight: 100;
+    text-decoration: underline;
+}
+
+#github-link {
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
+#github-link .nav-white-text{
+    color: white;
+}
