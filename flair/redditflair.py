@@ -55,13 +55,14 @@ def reddit_setup():
     # print('DEBUG: ' + os.environ.get('REDDIT_USER_PASSWORD'))
 
     try:
-        # reddit.user.me()
+        reddit.user.me()
         # print('PRAW Reddit loaded with user: ' + reddit.user.me())
-        print(reddit.user.me())
+        # print(reddit.user.me())
     except Exception as err:
         if (str(err) != 'invalid_grant error processing request'):
-            print('LOGIN FAILURE')
+            print('SERVER REDDIT LOGIN FAILURE')
         else:
+            # TODO: Remove - this is all for multi-factor login and can't be run without user input
             state = str(random.randint(0, 65000))
             scopes = ['identity', 'history', 'read', 'edit']
             url = reddit.auth.url(scopes, state, 'permanent')
