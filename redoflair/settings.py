@@ -99,8 +99,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-LOGIN_REDIRECT_URL = 'flair:index'
-ACCOUNT_LOGOUT_REDIRECT_URL = 'flair:index' # Why does allauth use django's LOGIN_REDIRECT_URL but not LOGOUT_REDIRECT_URL?
+LOGIN_REDIRECT_URL = 'flair:set_flair_url'
+LOGOUT_REDIRECT_URL = 'flair:set_flair_url'
 
 WSGI_APPLICATION = 'redoflair.wsgi.application'
 
@@ -149,7 +149,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
 
 
 

@@ -1,0 +1,63 @@
+/* Nav bar styles */
+#navbar {
+    background-color: #6A9EE5;
+}
+
+.nav-light {
+    color:white;
+}
+/*Select all the pieces of text in the nav bar*/
+.nav-white-text, .navbar-nav .nav-link.nav-white-text {
+    color: white;
+    font-weight: 400;
+}
+
+.navbar-nav .nav-link.nav-white-text:hover {
+    color: white;
+}
+
+.nav-transform-scale:hover{
+    transform: scale(1.1,1.1);
+}
+
+.nav-bold-text {
+    font-weight: 700;
+}
+
+
+/* Collapse Menu */
+.navbar-toggler .navbar-toggler-icon{
+background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1.0)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.custom-toggler.navbar-toggler {
+    border-color: white;
+}
+
+/* Individual navbar components */
+
+#logout-btn {
+    font-weight: 100;
+    text-decoration: underline;
+}
+
+#github-link {
+    border: 1px solid white;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+#github-link .nav-white-text{
+    color: white;
+}
+
+#ranime-brand.navbar-brand {
+    padding: 0px;
+    position:relative;
+    bottom:-8px;
+}
+
+img#ranime-icon{
+    height: 60px;
+    width: 48px;
+}
