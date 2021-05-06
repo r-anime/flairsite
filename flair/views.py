@@ -8,6 +8,7 @@ from django.views.generic import View
 
 from .models import FlairsAwarded, FlairType
 from .redditflair import *
+from .emojiparsing import *
 
 
 # Create your views here.
@@ -46,6 +47,8 @@ def set_flair_url(request):
     username = auth.get_user(request).username
 
     current_flair = get_flair(username).get("flair_text")
+    current_flair_images = flair_icon_builder(current_flair)
+    stripped_flair = colon_emoji_strip(current_flair)
 
     awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
     awarded_flairs.sort(key=sort_awarded_flairs_by_order)
@@ -56,7 +59,8 @@ def set_flair_url(request):
     return render(request, 'flair/setflair.html', {
         'username': username,
         'allowed_flairs': awarded_flairs,
-        'current_flair': current_flair,
+        'current_flair_text': stripped_flair,
+        'current_flair_images': current_flair_images,
         'default_flairs': default_flairs,
     })
 

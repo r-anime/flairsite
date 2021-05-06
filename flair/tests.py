@@ -2,14 +2,21 @@ from django.test import TestCase
 from .redditflair import *
 from dotenv import load_dotenv
 from flair.models import FlairType, FlairsAwarded
+from .emojiparsing import *
 
 
 def setup_db():
-    q = FlairType(id=1, display_name="Cake", reddit_flair_emoji=":cake:", order=1)
+    q = FlairType(id=1, display_name="Cake", reddit_flair_emoji=":cake:", order=1,
+                  static_image='/static/flairs/bot.png')
     q.save()
-    q = FlairType(id=2, display_name="Upvote", reddit_flair_emoji=":upvote:", order=2)
+    q = FlairType(id=2, display_name="Upvote", reddit_flair_emoji=":upvote:", order=2,
+                  static_image='/static/flairs/upvote.png')
     q.save()
-    q = FlairType(id=3, display_name="Doge", reddit_flair_emoji=":doge:", order=3)
+    q = FlairType(id=3, display_name="Star", reddit_flair_emoji=":star:", order=3,
+                  static_image='/static/flairs/star.png')
+    q.save()
+    q = FlairType(id=7, display_name="Anilist", reddit_flair_emoji=":ANI:", order=96,
+                  static_image='/static/flairs/Anilist.png')
     q.save()
 
     f = FlairsAwarded(flair_id=FlairType.objects.get(id=1), display_name="spez")
@@ -22,6 +29,31 @@ def setup_db():
     f.save()
 
 
+class EmojiParseTests(TestCase):
+    def test_strip_all(self):
+        example_flair = ':cake::star::ANI:https://anilist.co/user/spez'
+        colon_emoji_stripper_flair = colon_emoji_strip(example_flair)
+        self.assertIs('https://anilist.co/user/spez' == colon_emoji_stripper_flair, True)
+
+    def test_strip_single(self):
+        example_flair = ':cake::star::ANI:https://anilist.co/user/spez'
+        colon_emoji_stripper_flair = colon_emoji_strip_single(example_flair)
+        self.assertIs(':star::ANI:https://anilist.co/user/spez' == colon_emoji_stripper_flair, True)
+
+    def test_get_all_enoji(self):
+        example_flair = ':cake::star::ANI:https://anilist.co/user/spez'
+        all_colon_emoji = get_all_colon_emoji(example_flair)
+        ls = [':cake:', ':star:', ':ANI:']
+        self.assertIs(ls == all_colon_emoji, True)
+
+    def test_get_all_enoji_with_database(self):
+        setup_db()
+        example_flair = ':cake::upvote::ANI:https://anilist.co/user/spez'
+        ls = ['/static/flairs/bot.png', '/static/flairs/upvote.png', '/static/flairs/Anilist.png']
+        image_list = flair_icon_builder(example_flair)
+        self.assertIs(ls == image_list, True)
+
+
 class FlairModelTests(TestCase):
     def test_setup_db(self):
         setup_db()
@@ -29,7 +61,6 @@ class FlairModelTests(TestCase):
         self.assertIs(FlairType.objects.get(pk=2).display_name == "Upvote", True)
         self.assertIs(FlairsAwarded.objects.get(pk=1).display_name == "spez", True)
         self.assertIs(FlairsAwarded.objects.get(pk=1).flair_id == FlairType.objects.get(pk=1), True)
-
 
     def test_user_get_all_FlairsAwarded(self):
         username = "spez"
@@ -41,7 +72,6 @@ class FlairModelTests(TestCase):
 
     # def test_get_data(self):
     #     self.assertIs(FlairType.objects.get(pk=1).display_name == "Cake", True)
-
 
 
 class RedditFlairTests(TestCase):
