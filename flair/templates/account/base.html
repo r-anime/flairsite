@@ -78,6 +78,7 @@
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <input type="hidden" name="next" id="logoutNext" value=""/>
+                    <!--TODO: Style this button or change it to text with button functionality-->
                     <b-button class="nav-white-text" id="logout-btn" type="submit" variant="secondary">Log Out</b-button>
                 </form>
 
