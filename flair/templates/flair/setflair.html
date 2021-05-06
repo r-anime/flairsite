@@ -9,7 +9,7 @@ Setting flair for: {% load account %}{% user_display user %} {% load account soc
 Current flair is: {{current_flair}}
 
 
-<form action="/flair/submit" method="post">
+<form action="/submit" method="post">
     {% csrf_token %}
 
     <input type="submit" value="Reset Flair" name="flair_reset_request">
