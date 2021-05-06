@@ -59,8 +59,8 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link nav-white-text nav-transform-scale"href="/flair/set">Set Flair</a></li>
-                <li class="nav-item"><a class="nav-link nav-white-text nav-transform-scale" href="/flair/wiki">Flair Wiki</a></li>
+                <li class="nav-item"><a class="nav-link nav-white-text nav-transform-scale"href="/set">Set Flair</a></li>
+                <li class="nav-item"><a class="nav-link nav-white-text nav-transform-scale" href="/wiki">Flair Wiki</a></li>
                 <li class="nav-item">
                     <a class="navbar-brand" id="github-link" href="https://github.com/r-anime/flairsite">
                         <span class="nav-white-text">Github</span>
@@ -69,9 +69,19 @@
                 </li>
             </ul>
             <div class="ml-auto text-right">
+
+                <!-- Don't display the logout section if we are not logged in -->
+                {% load account %} {% user_display user as user_display %}
+                {% if user_display %}
                 <div class="nav-white-text">Currently logged in as <span class="nav-bold-text">{% load account %}{% user_display user %} {% load account socialaccount %}</span></div>
-                <!-- TODO: Add functionality to logout -->
-                <a class="nav-white-text" id="logout-btn">Log out</a>
+
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" id="logoutNext" value=""/>
+                    <b-button class="nav-white-text" id="logout-btn" type="submit" variant="secondary">Log Out</b-button>
+                </form>
+
+                {% endif %}
             </div>
         </div>
     </b-navbar>

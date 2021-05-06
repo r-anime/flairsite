@@ -1,5 +1,9 @@
+from allauth.account.views import LoginView, logout
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.views.generic import View
 
 from .models import FlairsAwarded, FlairType
 from .redditflair import *
@@ -21,6 +25,16 @@ def wiki(request):
     return render(request, 'flair/wiki.html', {
         'wiki_flairs': wiki_flairs,
     })
+
+
+class FlairLoginView(LoginView):
+    template_name = 'account/login.html'
+
+
+class FlairLogoutView(View):
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        return redirect(request.POST['next'])
 
 
 @login_required()
