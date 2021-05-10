@@ -46,6 +46,7 @@ def set_flair_url(request):
     # username = request.user #Lazyload issue potential
     username = auth.get_user(request).username
 
+    # TODO: This is the crash point if no account exists - return a no-reddit-account exists page (test with an admin account)
     current_flair = get_flair(username).get("flair_text")
     current_flair_images = flair_icon_builder(current_flair)
     stripped_flair = colon_emoji_strip(current_flair)
