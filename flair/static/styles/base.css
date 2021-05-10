@@ -16,10 +16,6 @@
     color: white;
 }
 
-.nav-transform-scale:hover{
-    transform: scale(1.1,1.1);
-}
-
 .nav-bold-text {
     font-weight: 700;
 }
@@ -60,4 +56,12 @@ background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32
 img#ranime-icon{
     height: 60px;
     width: 48px;
+}
+
+
+/* For Desktop */
+@media only screen and (min-width: 768px) {
+    .nav-transform-scale:hover{
+        transform: scale(1.1,1.1);
+    }
 }
