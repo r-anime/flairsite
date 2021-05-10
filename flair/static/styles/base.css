@@ -1,4 +1,7 @@
+body {background-color: #FBFBFB;}
+
 /* Nav bar styles */
+
 #navbar {
     background-color: #6A9EE5;
 }
@@ -63,8 +66,6 @@ img#ranime-icon{
     display: none;
 }
 
-
-
 /* For Desktop */
 @media only screen and (min-width: 768px) {
     .nav-transform-scale:hover{
@@ -80,10 +81,8 @@ img#ranime-icon{
         display: flex;
         flex-direction: row;
         align-items: center;
-
         /* Same spacing between the border and the other items, as other items have between each other */
         margin-left: 8px;
-
         border: 1px solid white;
         border-radius: 8px;
         padding: 5px 10px;
