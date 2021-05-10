@@ -30,27 +30,24 @@ background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32
     border-color: white;
 }
 
+#navbarSupportedContent {
+    margin-top: 30px;
+}
+
 /* Individual navbar components */
 
 #logout-btn {
     font-weight: 100;
     text-decoration: underline;
-}
-
-#github-link {
-    border: 1px solid white;
-    border-radius: 8px;
-    padding: 5px 10px;
-}
-
-#github-link .nav-white-text{
-    color: white;
+    padding: 0px;
+    background-color: rgba(255, 0, 0, 0.0);
+    border-color: rgba(255, 0, 0, 0.0);
 }
 
 #ranime-brand.navbar-brand {
     padding: 0px;
     position:relative;
-    bottom:-8px;
+    bottom:-9px;
 }
 
 img#ranime-icon{
@@ -58,10 +55,47 @@ img#ranime-icon{
     width: 48px;
 }
 
+#github-link{
+    padding: 8px 0px;
+}
+
+#github-link img{
+    display: none;
+}
+
+
 
 /* For Desktop */
 @media only screen and (min-width: 768px) {
     .nav-transform-scale:hover{
         transform: scale(1.1,1.1);
+    }
+
+    #navbarSupportedContent {
+        margin-top: 0px;
+    }
+
+    #github-link {
+        /* Center this manually because bootstrap is a pain */
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        /* Same spacing between the border and the other items, as other items have between each other */
+        margin-left: 8px;
+
+        border: 1px solid white;
+        border-radius: 8px;
+        padding: 5px 10px;
+    }
+
+    #github-link img{
+        display: block;
+    }
+
+    #github-link .nav-white-text{
+        color: white;
+        font-weight: 700;
+        margin-right: 5px;
     }
 }

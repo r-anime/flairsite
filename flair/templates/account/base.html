@@ -62,9 +62,9 @@
                 <li class="nav-item"><a class="nav-link nav-white-text nav-transform-scale"href="/set">Set Flair</a></li>
                 <li class="nav-item"><a class="nav-link nav-white-text nav-transform-scale" href="/wiki">Flair Wiki</a></li>
                 <li class="nav-item">
-                    <a class="navbar-brand" id="github-link" href="https://github.com/r-anime/flairsite">
+                    <a id="github-link" class="nav-link" href="https://github.com/r-anime/flairsite">
                         <span class="nav-white-text">Github</span>
-                        <img class="d-inline-block align-top" src="{% static 'github/GitHub-Mark-Light-32px.png' %}" alt="GitHub">
+                        <img src="{% static 'github/GitHub-Mark-Light-32px.png' %}" alt="GitHub">
                     </a>
                 </li>
             </ul>
@@ -78,8 +78,7 @@
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <input type="hidden" name="next" id="logoutNext" value=""/>
-                    <!--TODO: Style this button or change it to text with button functionality-->
-                    <b-button class="nav-white-text" id="logout-btn" type="submit" variant="secondary">Log Out</b-button>
+                    <b-button class="nav-white-text" id="logout-btn" type="submit">Log out</b-button>
                 </form>
 
                 {% endif %}
