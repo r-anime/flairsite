@@ -7,6 +7,8 @@ from flair.models import FlairsAwarded, FlairType
 
 def colon_emoji_strip(string):
     """Takes string and removes ALL :emoji: from the front in ':' text ':' format."""
+    if string is None:
+        return ''  # If empty or None return empty string
     return re.sub(':.+?:', '', string)
 
 
@@ -17,12 +19,11 @@ def colon_emoji_strip_single(string):
 
 def get_all_colon_emoji(string):
     """Takes string and returns a list of stings in (:emoji:) ':' text ':' format."""
-    print("flair=" + string)
+    if string is None:
+        return ''  # If empty or None return empty string
     reg_exp_obj = re.compile(':.+?:')
     return reg_exp_obj.findall(string)
 
-def is_not_blank_flair(s):
-    return bool(s and not s.isspace())
 
 def flair_icon_builder(flair_string):
     """Builds a list of static/images to display instead of the text emoji in a flair. No validation on a user."""
