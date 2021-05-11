@@ -80,6 +80,12 @@ class EmojiParseTests(TestCase):
         ls = [':cake:', ':star:', ':ANI:']
         self.assertIs(ls == all_colon_emoji, True)
 
+    def test_get_all_enoji_none(self):
+        example_flair = ''
+        all_colon_emoji = get_all_colon_emoji(example_flair)
+        ls = []
+        self.assertIs(ls == all_colon_emoji, True)
+
     def test_get_all_enoji_with_database(self):
         setup_db()
         example_flair = ':cake::upvote::ANI:https://anilist.co/user/spez'

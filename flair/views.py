@@ -2,6 +2,7 @@ from allauth.account.views import LoginView, logout
 from django.contrib import auth
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.generic import View
@@ -46,25 +47,29 @@ def set_flair_url(request):
     # username = request.user #Lazyload issue potential
     username = auth.get_user(request).username
 
-    current_flair = get_flair(username).get("flair_text")
-    current_flair_images = flair_icon_builder(current_flair)
-    stripped_flair = colon_emoji_strip(current_flair)
-    tracker_name = tracker_type(current_flair)
+    if check_user_exists(username):
 
-    awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
-    awarded_flairs.sort(key=sort_awarded_flairs_by_order)
+        current_flair = get_flair(username).get("flair_text")
+        current_flair_images = flair_icon_builder(current_flair)
+        stripped_flair = colon_emoji_strip(current_flair)
+        tracker_name = tracker_type(current_flair)
 
-    default_flairs = list(FlairType.objects.filter(flair_type="default"))
-    default_flairs.sort(key=sort_flairtype_by_order)
+        awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
+        awarded_flairs.sort(key=sort_awarded_flairs_by_order)
 
-    return render(request, 'flair/setflair.html', {
-        'username': username,
-        'allowed_flairs': awarded_flairs,
-        'current_flair_text': stripped_flair,
-        'current_flair_images': current_flair_images,
-        'tracker_name': tracker_name,
-        'default_flairs': default_flairs,
-    })
+        default_flairs = list(FlairType.objects.filter(flair_type="default"))
+        default_flairs.sort(key=sort_flairtype_by_order)
+
+        return render(request, 'flair/setflair.html', {
+            'username': username,
+            'allowed_flairs': awarded_flairs,
+            'current_flair_text': stripped_flair,
+            'current_flair_images': current_flair_images,
+            'tracker_name': tracker_name,
+            'default_flairs': default_flairs,
+        })
+    else:
+        return HttpResponse('No reddit account is attached to this login. (Shadowbanned or Site-Administrator)')
 
 
 setup_status = False
