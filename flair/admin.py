@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import FlairType, FlairsAwarded
+from .models import FlairType, FlairsAwarded, ActionLogging
 
 
 class FlairsAwardedAdmin(admin.ModelAdmin):
@@ -25,5 +25,18 @@ class FlairTypeAdmin(admin.ModelAdmin):
         )
 
 
+class ActionLoggingAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'action',
+        'action_info',
+        'reddit_name',
+        'error',
+        'timestamp'
+        )
+    search_fields = ['reddit_name']
+
+
 admin.site.register(FlairType, FlairTypeAdmin)
 admin.site.register(FlairsAwarded, FlairsAwardedAdmin)
+admin.site.register(ActionLogging, ActionLoggingAdmin)

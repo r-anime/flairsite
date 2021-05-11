@@ -119,8 +119,6 @@ def submit(request):
     # username = request.user #Lazyload issue potential
     username = auth.get_user(request).username
 
-    #  TODO: Add logging of some kind on each request
-
     # should reddit be setup here or somewhere else one single time?
     if not setup_status:
         setup_reddit_once()
