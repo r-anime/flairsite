@@ -17,14 +17,20 @@ def colon_emoji_strip_single(string):
 
 def get_all_colon_emoji(string):
     """Takes string and returns a list of stings in (:emoji:) ':' text ':' format."""
+    print("flair=" + string)
     reg_exp_obj = re.compile(':.+?:')
     return reg_exp_obj.findall(string)
 
+def is_not_blank_flair(s):
+    return bool(s and not s.isspace())
 
 def flair_icon_builder(flair_string):
     """Builds a list of static/images to display instead of the text emoji in a flair. No validation on a user."""
-
     file_list = []
+
+    if flair_string is None:
+        return file_list  # If empty or None return nothing
+
     ls = get_all_colon_emoji(flair_string)
     database = FlairType.objects.all()
 
