@@ -50,6 +50,7 @@ def set_flair_url(request):
     current_flair = get_flair(username).get("flair_text")
     current_flair_images = flair_icon_builder(current_flair)
     stripped_flair = colon_emoji_strip(current_flair)
+    tracker_name = tracker_type(current_flair)
 
     awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
     awarded_flairs.sort(key=sort_awarded_flairs_by_order)
@@ -62,6 +63,7 @@ def set_flair_url(request):
         'allowed_flairs': awarded_flairs,
         'current_flair_text': stripped_flair,
         'current_flair_images': current_flair_images,
+        'tracker_name':tracker_name,
         'default_flairs': default_flairs,
     })
 

@@ -7,12 +7,21 @@
 
 Setting flair for: {% load account %}{% user_display user %} {% load account socialaccount %}
 <br>
-Current flair is:
-{% for flair_image in current_flair_images %}
-    <img class="d-inline-block align-top" src="{{flair_image}}">
-{% endfor %}
-{{current_flair_text}}
 
+{% if current_flair_images|length >= 1 or current_flair_text|length > 0 %}
+Current flair is:
+    <div id="{{tracker_name}}box" style="color:white">
+        {% for flair_image in current_flair_images %}
+            <img class="d-inline-block align-top" src="{{flair_image}}">
+        {% endfor %}
+        {{current_flair_text}}
+    </div>
+{% else %}
+    <!--User has not set a flair yet. -->
+{% endif %}
+<br>
+
+<link rel="stylesheet" type="text/css" href="{% static '/styles/setflair.css' %}">
 
 <form action="/submit" method="post">
     {% csrf_token %}

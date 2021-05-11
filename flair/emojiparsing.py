@@ -34,3 +34,20 @@ def flair_icon_builder(flair_string):
                 file_list.append(flair_type.static_image)
 
     return file_list
+
+
+def tracker_type(flair_string):
+    """Reads a flair and returns the tracker's name from the database."""
+
+    ls = get_all_colon_emoji(flair_string)
+
+    if not ls:  # Does the current flair have emoji?
+        return "notracker"  # No emoji found
+    else:
+        database = FlairType.objects.all()
+        for emoji in ls:
+            for flair_type in database:
+                if emoji == flair_type.reddit_flair_emoji:
+                    if flair_type.flair_type == 'default':
+                        return flair_type.display_name
+    return "notracker"  # has emoji but no tracker
