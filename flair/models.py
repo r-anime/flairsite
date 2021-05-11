@@ -31,3 +31,16 @@ class FlairsAwarded(models.Model):
 
     def __str__(self):
         return "{} : {}".format(self.display_name, self.flair_id)
+
+
+
+class ActionLogging(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    action = models.CharField("Action attempted.", max_length=256)
+    action_info = models.CharField("Info related to the action.", max_length=256)
+    reddit_name = models.CharField("Redditor name.", max_length=20)
+    error = models.CharField("Error message.", max_length=256)
+    timestamp = models.DateTimeField('Timestamp of event.', default=timezone.now)
+
+    def __str__(self):
+        return "id=({}) action=({}) action_info=({}) reddit_name=({}) timestamp=({})".format(self.id, self.action, self.action_info, self.reddit_name, self.timestamp)
