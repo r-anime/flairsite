@@ -84,12 +84,14 @@ img#ranime-icon{
         /* Same spacing between the border and the other items, as other items have between each other */
         margin-left: 8px;
         border: 1px solid white;
-        border-radius: 8px;
+        border-radius: 5px;
         padding: 5px 10px;
     }
 
     #github-link img{
         display: block;
+        width: 28px;
+        height: 28px;
     }
 
     #github-link .nav-white-text{
