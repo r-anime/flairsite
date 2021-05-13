@@ -25,12 +25,12 @@ def get_all_colon_emoji(string):
     return reg_exp_obj.findall(string)
 
 
-def flair_icon_builder(flair_string):
-    """Builds a list of static/images to display instead of the text emoji in a flair. No validation on a user."""
-    file_list = []
+def users_current_awarded_flair_icons(flair_string):
+    """Builds a list of FlairType flair's the user is currently using. No validation on a user, just shows what they have already."""
+    awarded_flairs = []
 
     if flair_string is None:
-        return file_list  # If empty or None return nothing
+        return awarded_flairs  # If empty or None return nothing
 
     ls = get_all_colon_emoji(flair_string)
     database = FlairType.objects.all()
@@ -38,9 +38,9 @@ def flair_icon_builder(flair_string):
     for emoji in ls:
         for flair_type in database:
             if emoji == flair_type.reddit_flair_emoji:
-                file_list.append(flair_type.static_image)
+                awarded_flairs.append(flair_type)
 
-    return file_list
+    return awarded_flairs
 
 
 def tracker_type(flair_string):
@@ -109,4 +109,26 @@ def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, f
 
     #  TODO: Somethings wrong, just give them their award emoji. Is this the best workflow?
     return flair_award_emoji_to_set
+
+
+def strip_flair_to_just_tracker_account_name(string):
+    return ''
+
+def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
+    """Edits the all_awarded_flairs list to set if a flair is 'checked' and in the users flair already."""
+    ls = []
+
+    for awarded_flair in all_awarded_flairs:
+
+        matched = False
+        for currently_selected_flair in current_selected_flair_list:
+            if awarded_flair.flair_id == currently_selected_flair:
+                matched = True
+        if matched:
+            awarded_flair.flair_id.checked = True
+        else:
+            awarded_flair.flair_id.checked = False
+        ls.append(awarded_flair)
+
+    return ls
 

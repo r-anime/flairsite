@@ -49,12 +49,13 @@ def set_flair_url(request):
     if check_user_exists(username):
 
         current_flair = get_flair(username).get("flair_text")
-        current_flair_images = flair_icon_builder(current_flair)
+        current_emoji_flair_list = users_current_awarded_flair_icons(current_flair)
         stripped_flair = colon_emoji_strip(current_flair)
         tracker_name = tracker_type(current_flair)
 
         awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
         awarded_flairs.sort(key=sort_awarded_flairs_by_order)
+        awarded_flairs = find_already_set_flairs(awarded_flairs, current_emoji_flair_list) # Adds 'checked' status to objects
 
         default_flairs = list(FlairType.objects.filter(flair_type="default"))
         default_flairs.sort(key=sort_flairtype_by_order)
@@ -63,7 +64,7 @@ def set_flair_url(request):
             'username': username,
             'allowed_flairs': awarded_flairs,
             'current_flair_text': stripped_flair,
-            'current_flair_images': current_flair_images,
+            'current_emoji_flair_list': current_emoji_flair_list,
             'tracker_name': tracker_name,
             'default_flairs': default_flairs,
         })

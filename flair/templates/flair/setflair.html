@@ -8,11 +8,11 @@
 Setting flair for: {% load account %}{% user_display user %} {% load account socialaccount %}
 <br>
 
-{% if current_flair_images|length >= 1 or current_flair_text|length > 0 %}
+{% if current_emoji_flair_list|length >= 1 or current_flair_text|length > 0 %}
 Current flair is:
     <div id="{{tracker_name}}box" style="color:white">
-        {% for flair_image in current_flair_images %}
-            <img class="d-inline-block align-top" src="{{flair_image}}">
+        {% for flair_image in current_emoji_flair_list %}
+            <img class="d-inline-block align-top" src="{{flair_image.static_image}}">
         {% endfor %}
         {{current_flair_text}}
     </div>
@@ -52,10 +52,27 @@ Current flair is:
         <br>
         <h3>Select any number of additional awarded flairs:</h3>
 
-        {% for flairtype in allowed_flairs %}
-            <img src="{{flairtype.flair_id.static_image}}">
-            <input type="checkbox" id="flairChoice{{flairtype.flair_id.id}}" name="flairtype_{{flairtype.flair_id.display_name}}" value="{{flairtype.flair_id.display_name}}">
-            <label for="flairChoice{{flairtype.flair_id.id}}">{{flairtype.flair_id}}</label><br>
+        {% for flair_awarded in allowed_flairs %}
+            <img src="{{flair_awarded.flair_id.static_image}}">
+
+            <!-- checked="checked"-->
+<!--            if flairetype.flair... = something known-->
+
+            {%if flair_awarded.flair_id.checked == True %}
+                <input type="checkbox"
+                       id="flairChoice{{flair_awarded.flair_id.id}}"
+                       name="flairtype_{{flair_awarded.flair_id.display_name}}"
+                       value="{{flair_awarded.flair_id.display_name}}"
+                       checked="checked"
+                >
+            {% else %}
+                <input type="checkbox"
+                       id="flairChoice{{flair_awarded.flair_id.id}}"
+                       name="flairtype_{{flair_awarded.flair_id.display_name}}"
+                       value="{{flair_awarded.flair_id.display_name}}"
+                >
+            {% endif %}
+            <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}} </label><br>
         {% endfor %}
     {% endif %}
 
