@@ -1,3 +1,7 @@
+.custom-container {
+  margin-top: 20px;
+}
+
 /* Section Titles ----- TODO: Maybe move these to a reusable .css file since we'll use them for the wiki page*/  
 .section-title-grey {
   font-size: larger;
@@ -10,9 +14,41 @@
 }
 
 
-
+/* Account name and submit form */
 #trackerAccountName.form-control {
-  width: 200px;
+  width: 100%;
+}
+
+#account-inner-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#label-disclaimer-container {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+#account-inner-container small{
+  align-self: flex-end;
+}
+
+#input-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.blue-input {
+  background-color: #6A9EE5;
+  width: 100px;
+  height: 30px;
+  margin-left: 5px;
+  border-style: none;
+  color: white;
+  border-radius: 5px;
+  font-weight: 200;
 }
 
 

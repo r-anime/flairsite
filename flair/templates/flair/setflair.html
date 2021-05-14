@@ -9,7 +9,7 @@
 
 <form action="/submit" method="post">
     {% csrf_token %}
-    <div class="container">
+    <div class="container custom-container">
         <div class="row">
             <div class="col-md">
                 <div class="section-title-grey">Please select your <span class="section-title-emphasis">Anime Tracking</span> flair:</div>
@@ -60,13 +60,18 @@
 
         <div class="row">
             <div class="col-md">
-                <label class="section-title-grey" for="trackerAccountName">Anime Tracker <span class="section-title-emphasis">Account Name</span>:</label><br>
-                <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="" maxlength="20">
-                <br>
-                <input type="submit" value="Reset Flair" name="flair_reset_request">
-                <input type="submit" value="Submit" name="flair_change_request">
+                    <div id="account-inner-container">
+                        <div id="label-disclaimer-container">
+                            <small class="form-text text-muted">* Not the full URL</small>
+                            <label class="section-title-grey" for="trackerAccountName">Anime Tracker <span class="section-title-emphasis">Account Name</span>:</label>
+                        </div>
+                        <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="" maxlength="20">
+                        <div id="input-container">
+                            <input class="blue-input" type="submit" value="Reset Flair" name="flair_reset_request">
+                            <input class="blue-input" type="submit" value="Submit" name="flair_change_request">
+                        </div> 
+                </div>
             </div>
-
             <div class="col-md">
                 {% if current_emoji_flair_list|length >= 1 or current_flair_text|length > 0 %}
                 <div class="section-title-grey">Flair Preview:</div>
