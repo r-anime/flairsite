@@ -5,81 +5,86 @@
 
 {% block content %}
 
-Setting flair for: {% load account %}{% user_display user %} {% load account socialaccount %}
-<br>
-
-{% if current_emoji_flair_list|length >= 1 or current_flair_text|length > 0 %}
-Current flair is:
-    <div id="{{tracker_name}}box" style="color:white">
-        {% for flair_image in current_emoji_flair_list %}
-            <img class="d-inline-block align-top" src="{{flair_image.static_image}}">
-        {% endfor %}
-        <a href="{{current_flair_text}}" target="_blank" style="color:white">{{current_flair_text}}</a>
-    </div>
-{% else %}
-    <!--User has not set a flair yet. -->
-{% endif %}
-<br>
-
 <link rel="stylesheet" type="text/css" href="{% static '/styles/setflair.css' %}">
 
 <form action="/submit" method="post">
     {% csrf_token %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md">
+                <h3>Please select your flair:</h3>
 
-    <input type="submit" value="Reset Flair" name="flair_reset_request">
+                <input type="radio" id="notracker" name="defaultflair" value="notracker">
+                <label for="notracker">No Tracker</label><br>
+            
+                {% for flairtype in default_flairs %}
+                    {% if flairtype.flair_type == "default" %}
+                        <img src="{{flairtype.static_image}}">
+                        <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}">
+                        <label for="{{flairtype.display_name}}">{{flairtype.display_name}}</label><br>
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            </div>
 
-    <h3>Please select your flair:</h3>
-
-    <input type="radio" id="notracker" name="defaultflair" value="notracker">
-    <label for="notracker">No Tracker</label><br>
-
-    {% for flairtype in default_flairs %}
-        {% if flairtype.flair_type == "default" %}
-            <img src="{{flairtype.static_image}}">
-            <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}">
-            <label for="{{flairtype.display_name}}">{{flairtype.display_name}}</label><br>
-            <br>
-        {% endif %}
-    {% endfor %}
-
-    <label for="trackerAccountName">Account Name</label><br>
-    <input type="text" id="trackerAccountName" name="trackerAccountName" value="" maxlength="20"><br>
-
-
-
-    {%if allowed_flairs %}
-        <!-- only display award flairs if they have any  -->
-        <br>
-        <h3>Select any number of additional awarded flairs:</h3>
-
-        {% for flair_awarded in allowed_flairs %}
-            <img src="{{flair_awarded.flair_id.static_image}}">
-
-            <!-- checked="checked"-->
-<!--            if flairetype.flair... = something known-->
-
-            {%if flair_awarded.flair_id.checked == True %}
-                <input type="checkbox"
-                       id="flairChoice{{flair_awarded.flair_id.id}}"
-                       name="flairtype_{{flair_awarded.flair_id.display_name}}"
-                       value="{{flair_awarded.flair_id.display_name}}"
-                       checked="checked"
-                >
-            {% else %}
-                <input type="checkbox"
-                       id="flairChoice{{flair_awarded.flair_id.id}}"
-                       name="flairtype_{{flair_awarded.flair_id.display_name}}"
-                       value="{{flair_awarded.flair_id.display_name}}"
-                >
+            <div class="col-md">
+                {%if allowed_flairs %}
+                <!-- only display award flairs if they have any  -->
+                <h3>Select any number of additional awarded flairs:</h3>
+        
+                {% for flair_awarded in allowed_flairs %}
+                    <img src="{{flair_awarded.flair_id.static_image}}">
+        
+                    <!-- checked="checked"-->
+        <!--            if flairetype.flair... = something known-->
+        
+                    {%if flair_awarded.flair_id.checked == True %}
+                        <input type="checkbox"
+                               id="flairChoice{{flair_awarded.flair_id.id}}"
+                               name="flairtype_{{flair_awarded.flair_id.display_name}}"
+                               value="{{flair_awarded.flair_id.display_name}}"
+                               checked="checked"
+                        >
+                    {% else %}
+                        <input type="checkbox"
+                               id="flairChoice{{flair_awarded.flair_id.id}}"
+                               name="flairtype_{{flair_awarded.flair_id.display_name}}"
+                               value="{{flair_awarded.flair_id.display_name}}"
+                        >
+                    {% endif %}
+                    <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}} </label><br>
+                {% endfor %}
             {% endif %}
-            <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}} </label><br>
-        {% endfor %}
-    {% endif %}
+            </div>
+        </div>
 
+        <div class="row">
+            <div class="col-md">
+                <label for="trackerAccountName">Anime Tracker <span>Account Name:</span></label><br>
+                <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="" maxlength="20">
+                <br>
+                <input type="submit" value="Reset Flair" name="flair_reset_request">
+                <input type="submit" value="Submit" name="flair_change_request">
+            </div>
 
-    <br>
-    <input type="submit" value="Submit" name="flair_change_request">
+            <div class="col-md">
+                {% if current_emoji_flair_list|length >= 1 or current_flair_text|length > 0 %}
+                Current flair is:
+                    <div id="{{tracker_name}}box" style="color:white">
+                        {% for flair_image in current_emoji_flair_list %}
+                            <img class="d-inline-block align-top" src="{{flair_image.static_image}}">
+                        {% endfor %}
+                        <a href="{{current_flair_text}}" target="_blank" style="color:white">{{current_flair_text}}</a>
+                    </div>
+                {% else %}
+                    <!--User has not set a flair yet. -->
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
 </form>
+
 
 
 {% endblock %}
