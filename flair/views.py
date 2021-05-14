@@ -7,9 +7,8 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.generic import View
 
-from .models import FlairsAwarded, FlairType
-from .redditflair import *
 from .emojiparsing import *
+from .redditflair import *
 
 
 # Create your views here.
@@ -50,12 +49,13 @@ def set_flair_url(request):
     if check_user_exists(username):
 
         current_flair = get_flair(username).get("flair_text")
-        current_flair_images = flair_icon_builder(current_flair)
+        current_emoji_flair_list = users_current_awarded_flair_icons(current_flair)
         stripped_flair = colon_emoji_strip(current_flair)
         tracker_name = tracker_type(current_flair)
 
         awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
         awarded_flairs.sort(key=sort_awarded_flairs_by_order)
+        awarded_flairs = find_already_set_flairs(awarded_flairs, current_emoji_flair_list) # Adds 'checked' status to objects
 
         default_flairs = list(FlairType.objects.filter(flair_type="default"))
         default_flairs.sort(key=sort_flairtype_by_order)
@@ -64,7 +64,7 @@ def set_flair_url(request):
             'username': username,
             'allowed_flairs': awarded_flairs,
             'current_flair_text': stripped_flair,
-            'current_flair_images': current_flair_images,
+            'current_emoji_flair_list': current_emoji_flair_list,
             'tracker_name': tracker_name,
             'default_flairs': default_flairs,
         })
@@ -80,41 +80,6 @@ def setup_reddit_once():
     global setup_status  # for scope
     print('Reddit object initialized')
     setup_status = True
-
-
-def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, flair_tracker_text_to_set,
-                         flair_tracker_user_to_set):
-    """Flair is limited to 64 characters, this method tries and cuts down longer flairs to fit"""
-    """It is assumed the longest tracker_text_to_set will be 51 characters. Eg:"""
-    """https://anime-planet.com/users/12345678901234567890"""
-
-    # TODO: Validate that flair submitted is a correct link
-    # TODO: Filter any emoji out of the user submitted portion
-
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + flair_tracker_user_to_set
-    if len(full_length_string) <= 64:
-        # Great, no problems return it
-        return full_length_string
-
-    # Remove the "https://" and see if that fits
-    flair_tracker_text_to_set = flair_tracker_text_to_set.replace("https://", "")
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + flair_tracker_user_to_set
-    if len(full_length_string) <= 64:
-        return full_length_string
-
-    # Cut the tracker emoji as well and see if that fits
-    full_length_string = flair_award_emoji_to_set + flair_tracker_text_to_set + flair_tracker_user_to_set
-    if len(full_length_string) <= 64:
-        return full_length_string
-
-    # Just have the tracker site emoji and the users username
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_user_to_set
-    if len(full_length_string) <= 64:
-        return full_length_string
-
-    #  TODO: Somethings wrong, just give them their award emoji. Is this the best workflow?
-    return flair_award_emoji_to_set
-
 
 @login_required
 def submit(request):
@@ -151,9 +116,9 @@ def submit(request):
     # Sort out 'default' flair section
     if "defaultflair" in request.POST:
         if request.POST["defaultflair"] == "notracker":
-            print("notracker")
-
-        if "trackerAccountName" in request.POST:
+            # print("notracker")
+            pass
+        elif "trackerAccountName" in request.POST:
             # TODO: Check if username is set or something
             # print(request.POST)
             # print(request.POST["defaultflair"])
@@ -161,7 +126,8 @@ def submit(request):
 
             default_flairs = list(FlairType.objects.filter(flair_type="default"))
             for flairtype in default_flairs:
-                print(flairtype)
+                print(flairtype.display_name)
+                # Look for through database flairs to find what they have
                 if request.POST["defaultflair"] == flairtype.display_name:
                     #  Set both tracker icon and entered tracker name/id
                     flair_tracker_emoji_to_set = flairtype.reddit_flair_emoji
@@ -169,6 +135,8 @@ def submit(request):
                     flair_tracker_user_to_set = request.POST["trackerAccountName"]
                     flair_template_to_set = flairtype.reddit_flair_template_id
                     break
+
+    # flair_tracker_user_to_set = validate_tracker_account_name(flair_tracker_user_to_set)
 
     # Build the flair text that will then be set
     final_flair_to_set = flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set,
