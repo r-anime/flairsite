@@ -1,3 +1,16 @@
+/* Section Titles ----- TODO: Maybe move these to a reusable .css file since we'll use them for the wiki page*/  
+.section-title-grey {
+  font-size: larger;
+  color: #474747;
+}
+
+.section-title-emphasis {
+  text-decoration: underline;
+  font-weight: 800;
+}
+
+
+
 #trackerAccountName.form-control {
   width: 200px;
 }
