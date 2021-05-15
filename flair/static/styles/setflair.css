@@ -56,8 +56,12 @@
 .flair-list{
   display: flex;
   flex-direction: column;
-  max-height: 300px;
   align-items: flex-start;
+  overflow: scroll;
+  max-height: 50vh;
+  /* Stupid scroll views always requiring dirty hacks to make things pretty */
+  margin: 0px -32px;
+  padding: 0px 32px;
 }
 
 .list-card {
@@ -95,6 +99,7 @@
 .track-box {
   border: 1px solid black;
   margin-top: 8px;
+  margin-bottom: 16px;
 }
 #notrackerbox {
   background-color: #dadada ;

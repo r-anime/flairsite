@@ -1,4 +1,8 @@
 body {background-color: #FBFBFB;}
+html,body {
+    height: 100%;
+}
+
 
 /* Nav bar styles */
 
