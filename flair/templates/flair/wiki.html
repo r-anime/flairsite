@@ -3,45 +3,64 @@
 {% load static %}
 
 {% block title %}{{ block.super }} - Flair Wiki{% endblock %}
-<link rel="stylesheet" type="text/css" href="{% static '/styles/wiki.css' %}">
 {% block content %}
 
-
-<br>
-<h1>Flair Wiki</h1>
-<br>
-
-
+<link rel="stylesheet" type="text/css" href="{% static '/styles/wiki.css' %}">
 <!--Default Flairs-->
-<h3>Default Anime Tracking Flairs</h3>
+<div class="custom-container">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="section-title-grey">Default Anime Tracking Flairs</div>
+                <ul>
+                    {% for flairtype in wiki_flairs %}
+                    {% if flairtype.flair_type == "default" %}
+                    <li class="list-card">
+                        <div class="wiki-item-text ">{{flairtype.wiki_text}}</div>
+                        <img src="{{flairtype.static_image}}">
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <!--Awarded Flairs-->
+                <div class="section-title-grey">Flair Rewards</div>
+                <ul>
+                    {% for flairtype in wiki_flairs %}
+                    {% if flairtype.flair_type == "award" %}
+                    <li class="list-card">
+                        <div class="wiki-item-text">{{flairtype.wiki_text}}</div>
+                        <img src="{{flairtype.static_image}}">
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="info-box">
+        <h5>What are flairs?</h5> 
+        <p>Flairs are a way to customize your appearance on Reddit everytime you post. They are 
+            subreddit specific and show up next to your username when you comment or make a 
+            new thread on that subreddit.</p> 
+            
+        <h5>Can I use anything as my flair?</h5> 
+        <p>No. You can have <span class="bold-info">1</span> flair for your main anime tracking service, like MyAnimeList or Anilist. This 
+            way, everyone will be able to see what you’re watching and perhaps 
+            recommend things you would enjoy. We also allow you to select up to <span class="bold-info">10</span>  award flairs, 
+            we hand these out during events we host throughout the year or to helpers who keep the sub running smoothly.</p>     
+        <h5>Can I suggest new flairs?</h5>    
 
-{% for flairtype in wiki_flairs %}
-    {% if flairtype.flair_type == "default" %}
-        {{flairtype.wiki_text}}
+        <p>Sure! But we’d appreciate it if they were tied to some sort of role in the sub, or an activity/event we could host for everyone. For example. we could host a “Writing Contest” and
+            the winners get a special flair image, like a medal to display their accomplishments.</p>
 
-        <li class="nav-item active">
-            <img src="{{flairtype.static_image}}">
-        </li>
-        <br>
-    {% endif %}
-{% endfor %}
-
-<!--Awarded Flairs-->
-
-<h3>Flair Rewards</h3>
-
-{% for flairtype in wiki_flairs %}
-    {% if flairtype.flair_type == "award" %}
-        {{flairtype.wiki_text}}
-
-        <li class="nav-item active">
-            <img src="{{flairtype.static_image}}">
-        </li>
-        <br>
-    {% endif %}
-{% endfor %}
-
-<!--Other Types-->
+        <h5>How do I add a flair?</h5>
+        <p>You can click <a href="/set">here</a> or head on over to the Set Flair page. After that, just select any flairs you have available to you that you wish to display. Don’t forget to set your account name for anime tracking services, otherwise you won’t be able to select a flair of that type. When you’re done, just click the “Apply Flairs” button.</p>
+    </div>
+</div>
 
 
-{% endblock %}
+    {% endblock %}

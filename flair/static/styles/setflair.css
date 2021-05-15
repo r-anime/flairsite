@@ -1,7 +1,3 @@
-.custom-container {
-  margin-top: 20px;
-}
-
 /* Account name and submit form */
 #trackerAccountName.form-control {
   width: 100%;
@@ -47,10 +43,15 @@
   margin-bottom: 0px;
 }
 
-.list-card img {
-  width: 24px;
-  height: 24px;
-  margin-left: auto;
+.flair-list{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: scroll;
+  max-height: 50vh;
+  /* Stupid scroll views always requiring dirty hacks to make things pretty */
+  margin: 0px -32px;
+  padding: 0px 32px;
 }
 
 /* Previews */

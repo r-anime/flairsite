@@ -1,0 +1,52 @@
+.custom-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* List views */
+.col ul {
+    padding-left: 0px;
+}
+
+.list-card .wiki-item-text {
+    color: #474747;
+}
+
+.list-card {
+    width: 250px;
+}
+
+
+/* Info Box */
+#info-box {
+    max-width: 100%;
+    padding: 10px;
+    margin: 50px 15px 16px 15px;
+    height: 100%;
+    background-color:white;
+    -webkit-box-shadow: 0px 0px 17px -5px #858585; 
+    box-shadow: 0px 0px 17px -5px #858585;
+    border-radius: 8px;
+}
+
+#info-box p {
+    color: #474747;
+}
+
+#info-box h5 {
+    color: #6A9EE5;
+}
+
+#info-box .bold-info {
+    font-weight: 700;
+}
+
+@media only screen and (min-width: 768px) {
+    .custom-container {
+        flex-direction: row;
+    }
+
+    #info-box {
+        margin: 0px 0px 0px auto;
+    }
+}
