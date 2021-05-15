@@ -2,18 +2,6 @@
   margin-top: 20px;
 }
 
-/* Section Titles ----- TODO: Maybe move these to a reusable .css file since we'll use them for the wiki page*/  
-.section-title-grey {
-  font-size: larger;
-  color: #474747;
-}
-
-.section-title-emphasis {
-  text-decoration: underline;
-  font-weight: 800;
-}
-
-
 /* Account name and submit form */
 #trackerAccountName.form-control {
   width: 100%;
@@ -53,31 +41,6 @@
 
 
 /* Lists */
-.flair-list{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  overflow: scroll;
-  max-height: 50vh;
-  /* Stupid scroll views always requiring dirty hacks to make things pretty */
-  margin: 0px -32px;
-  padding: 0px 32px;
-}
-
-.list-card {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: white;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding: 10px;
-  width: 200px;
-  -webkit-box-shadow: 0px 0px 17px -5px #858585; 
-  box-shadow: 0px 0px 17px -5px #858585;
-  border-radius: 8px;
-}
-
 .list-card label{
   color: #474747;
   margin-left: 8px;
