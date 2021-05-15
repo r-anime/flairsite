@@ -52,34 +52,71 @@
 }
 
 
+/* Lists */
+.flair-list{
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  align-items: flex-start;
+}
+
+.list-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: white;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 10px;
+  width: 200px;
+  -webkit-box-shadow: 0px 0px 17px -5px #858585; 
+  box-shadow: 0px 0px 17px -5px #858585;
+  border-radius: 8px;
+}
+
+.list-card label{
+  color: #474747;
+  margin-left: 8px;
+  margin-bottom: 0px;
+}
+
+.list-card img {
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+}
+
 /* Previews */
+
+#flair-preview {
+  margin-top: 23px; /* Small hack just align the titles, am too lazy to figure out a better way*/
+}
+
+.track-box {
+  border: 1px solid black;
+  margin-top: 8px;
+}
 #notrackerbox {
-  border: 1px solid black ;
   background-color: #dadada ;
 }
 
 #MALbox {
-  border: 1px solid black ;
   background-color: #2e51a2 ;
 }
 
 #animeplanetbox {
-  border: 1px solid black ;
   background-color: #13e9f7 ;
 }
 
 #Kitsubox {
-  border: 1px solid black ;
   background-color: #fd755c ;
 }
 
 #Anilistbox {
-  border: 1px solid black ;
   background-color: #02a9ff ;
 }
 
 #Anidbbox {
-  border: 1px solid black ;
   background-color: #ffaa55 ;
 }
 
