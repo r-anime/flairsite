@@ -16,7 +16,7 @@
                     {% for flairtype in wiki_flairs %}
                     {% if flairtype.flair_type == "default" %}
                     <li class="list-card">
-                        <div class="wiki-item-text ">{{flairtype.wiki_text}}</div>
+                        <div class="wiki-item-text ">{{flairtype.wiki_text|safe}}</div>
                         <img src="{{flairtype.static_image}}">
                     </li>
                     {% endif %}
@@ -32,7 +32,7 @@
                     {% for flairtype in wiki_flairs %}
                     {% if flairtype.flair_type == "award" %}
                     <li class="list-card">
-                        <div class="wiki-item-text">{{flairtype.wiki_text}}</div>
+                        <div class="wiki-item-text">{{flairtype.wiki_text|safe}}</div>
                         <img src="{{flairtype.static_image}}">
                     </li>
                     {% endif %}
