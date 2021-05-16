@@ -32,6 +32,7 @@ class ActionLoggingAdmin(admin.ModelAdmin):
         'action_info',
         'reddit_name',
         'error',
+        'user_agent',
         'timestamp'
         )
     search_fields = ['reddit_name']

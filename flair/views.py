@@ -38,6 +38,15 @@ class FlairLogoutView(View):
         return redirect(request.POST['next'])
 
 
+def LogLogin(username, user_agent):
+    logItem = ActionLogging(
+        action='set_flair_url',
+        reddit_name=username,
+        user_agent=user_agent
+    )
+    logItem.save()
+
+
 @login_required()
 def set_flair_url(request):
     if not setup_status:
@@ -45,6 +54,9 @@ def set_flair_url(request):
 
     # username = request.user #Lazyload issue potential
     username = auth.get_user(request).username
+
+    # TODO: Decide if this should be toggleable off by the admin
+    LogLogin(username, request.META.get('HTTP_USER_AGENT', ''))
 
     if check_user_exists(username):
 
