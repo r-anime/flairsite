@@ -81,7 +81,7 @@
                         {% for flair_image in current_emoji_flair_list %}
                             <img class="d-inline-block align-top" src="{{flair_image.static_image}}">
                         {% endfor %}
-                        <a href="{{current_flair_text}}" target="_blank" style="color:white">{{current_flair_text}}</a>
+                        <a href="{{current_flair_url}}" target="_blank" style="color:white">{{current_flair_text}}</a>
                     </div>
                 {% else %}
                     <!--User has not set a flair yet. -->
