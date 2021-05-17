@@ -25,8 +25,6 @@ def make_url_of_flair_text(string):
     return string
 
 
-
-
 def colon_emoji_strip_single(string):
     """Takes string and removes ONE :emoji: from the front in ':' text ':' format."""
     return re.sub(':.+?:', '', string, count=1)
@@ -126,10 +124,55 @@ def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, f
     return flair_award_emoji_to_set
 
 
-def strip_flair_to_just_tracker_account_name(string):
+def strip_flair_to_tracker_account_name(string):
+    """Takes a subreddit set flair and attempts to remove everything but the tracker's account name. Returns a blank string if it can't."""
+
+    if string is None:
+        return ''
+
+    # Remove :emoji:
+    string = colon_emoji_strip(string)
+
+    # Remove https://
+    https_filter = re.compile(re.escape('https://'), re.IGNORECASE)
+    http_filter = re.compile(re.escape('http://'), re.IGNORECASE)
+    string = https_filter.sub('', string)
+    string = http_filter.sub('', string)
+
+    # Remove tracker's
+    MAL1_filter = re.compile(re.escape('myanimelist.net/profile/'), re.IGNORECASE)
+    MAL2_filter = re.compile(re.escape('myanimelist.net/animelist/'), re.IGNORECASE)
+    Anilist_filter = re.compile(re.escape('anilist.co/user/'), re.IGNORECASE)
+    Kitsu_filter = re.compile(re.escape('kitsu.io/users/'), re.IGNORECASE)
+    Anidb_filter = re.compile(re.escape('anidb.net/user/'), re.IGNORECASE)
+    animeplanet_filter = re.compile(re.escape('anime-planet.com/users/'), re.IGNORECASE)
+
+    string = MAL1_filter.sub('', string)
+    string = MAL2_filter.sub('', string)
+    string = Anilist_filter.sub('', string)
+    string = Kitsu_filter.sub('', string)
+    string = Anidb_filter.sub('', string)
+    string = animeplanet_filter.sub('', string)
+
+    # All flairs set by the flair server will now be good. Legacy set flairs maybe not.
+
+    if len(string) <= 20:
+        if '/' not in string:
+            # All flairs set by the flair-server get here. Legacy flairs that were formatted well do to.
+            return string
+        else:
+            # Has '/animelist' or something additional, lets not risk dealing with it
+            return ''
+    else:
+        # Flair too long, must be something legacy we can't handle
+        return ''
+
+
+def tracker_account_name_validation(string):
     # Restrict the text to only be alpha-numeric, also have frontend validation on that
     # Make sure no one sneaks a :emoji: - just ban : characters. Should be covered by alphanumeric
     # Filter emoji out of user input if that isn't covered already. Believe some are considered alphanumeric.
+    # TODO: validation of user submitted account name
     return string
 
 
@@ -150,19 +193,4 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
         ls.append(awarded_flair)
 
     return ls
-
-
-
-
-
-
-# pre-populated user's tracker-account and tracker picked
-# 'required', no empty account
-
-
-
-#TODO: Make function to figure out what tracker and what emoji have been selected from a flair
-# so that the server can pre-populate them for the user
-
-
 

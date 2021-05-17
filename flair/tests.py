@@ -62,7 +62,7 @@ class ActionLoggingTests(TestCase):
         self.assertIs(ActionLogging.objects.get(pk=1).action == "delete_flair", True)
 
 
-class EmojiParseTests(TestCase):
+class FlairParsingTests(TestCase):
     def test_strip_all(self):
         example_flair = ':cake::star::ANI:https://anilist.co/user/spez'
         colon_emoji_stripper_flair = colon_emoji_strip(example_flair)
@@ -91,6 +91,27 @@ class EmojiParseTests(TestCase):
         ls = [FlairType.objects.get(id=1), FlairType.objects.get(id=2), FlairType.objects.get(id=7)]
         awarded_flairs_list = users_current_awarded_flair_icons(example_flair)
         self.assertIs(ls == awarded_flairs_list, True)
+
+    def test_strip_to_tracker_name(self):
+        MAL = ':MAL:https://myanimelist.net/profile/spez'
+        Anilist = ':star::ANI:HTTPS://anilist.co/user/spez'
+        Kitsu = ':Kitsu:http://kitsu.io/users/spez'
+        Anidb = ':star::anidb:https://anidb.net/user/spez'
+        animeplanet = ':star::AP:https://anime-planet.com/users/spez'
+        longname = ':cake::upvote::star:anime-planet.com/users/spezspezspezspezspez'
+        empty = ''
+        existing1 = 'https://anilist.co/user/badspler/animelist'
+        existing2 = 'https://www.imdb.com/list/ls123123123/'
+
+        self.assertIs(strip_flair_to_tracker_account_name(MAL) == 'spez', True)
+        self.assertIs(strip_flair_to_tracker_account_name(Anilist) == 'spez', True)
+        self.assertIs(strip_flair_to_tracker_account_name(Kitsu) == 'spez', True)
+        self.assertIs(strip_flair_to_tracker_account_name(Anidb) == 'spez', True)
+        self.assertIs(strip_flair_to_tracker_account_name(animeplanet) == 'spez', True)
+        self.assertIs(strip_flair_to_tracker_account_name(longname) == 'spezspezspezspezspez', True)
+        self.assertIs(strip_flair_to_tracker_account_name(empty) == '', True)
+        self.assertIs(strip_flair_to_tracker_account_name(existing1) == '', True)
+        self.assertIs(strip_flair_to_tracker_account_name(existing2) == '', True)
 
 
 class FlairModelTests(TestCase):
