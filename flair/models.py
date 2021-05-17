@@ -33,7 +33,6 @@ class FlairsAwarded(models.Model):
         return "{} : {}".format(self.display_name, self.flair_id)
 
 
-
 class ActionLogging(models.Model):
     id = models.BigAutoField(primary_key=True)
     action = models.CharField("Action attempted.", max_length=256)

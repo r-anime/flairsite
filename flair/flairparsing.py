@@ -72,7 +72,7 @@ def tracker_type(flair_string):
                     if flair_type.flair_type == 'default':
                         return flair_type.display_name
 
-    # This covers for when the account doesn't have a tracker emoji (space or policy) or is a legacy flair and matches on URL's instead
+    # This covers for when the account doesn't have a tracker emoji (ie: no space or if we allow as a policy) or is a legacy flair and is matching on URL's instead
 
     if "anidb.net" in flair_string:
         return "Anidb"

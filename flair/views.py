@@ -142,7 +142,7 @@ def submit(request):
 
             default_flairs = list(FlairType.objects.filter(flair_type="default"))
             for flairtype in default_flairs:
-                print(flairtype.display_name)
+                # print(flairtype.display_name)
                 # Look for through database flairs to find what they have
                 if request.POST["defaultflair"] == flairtype.display_name:
                     #  Set both tracker icon and entered tracker name/id

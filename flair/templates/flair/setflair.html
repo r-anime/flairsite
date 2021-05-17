@@ -16,13 +16,17 @@
 
                 <div class="flair-list">
                     <div class="list-card">
-                        <input type="radio" id="notracker" name="defaultflair" value="notracker">
+                        <input type="radio" id="notracker" name="defaultflair" value="notracker" checked="checked">
                         <label class="form-check-label" for="notracker">No Tracker</label>
                     </div>                    
                         {% for flairtype in default_flairs %}
                         {% if flairtype.flair_type == "default" %}
                         <div class="list-card">
-                            <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}">
+                            {% if flairtype.display_name == tracker_name %}
+                                <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}" checked="checked">
+                            {% else %}
+                                <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}">
+                            {% endif %}
                             <label class="form-check-label" for="{{flairtype.display_name}}">{{flairtype.display_name}}</label>
                             <img src="{{flairtype.static_image}}">
                         </div>         
