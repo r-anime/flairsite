@@ -2,7 +2,7 @@ from django.test import TestCase
 from .redditflair import *
 from dotenv import load_dotenv
 from flair.models import FlairType, FlairsAwarded, ActionLogging
-from .emojiparsing import *
+from .flairparsing import *
 
 
 def setup_db():
