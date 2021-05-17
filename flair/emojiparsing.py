@@ -12,6 +12,21 @@ def colon_emoji_strip(string):
     return re.sub(':.+?:', '', string)
 
 
+def make_url_of_flair_text(string):
+    """Takes string that MAY not start with http://, if it doesn't it prepends that elsewise returns"""
+    if string is None:
+        return ''  # If empty or None return empty string
+
+    if string.startswith('https://'):
+        return string
+    else:
+        string = "https://" + string
+
+    return string
+
+
+
+
 def colon_emoji_strip_single(string):
     """Takes string and removes ONE :emoji: from the front in ':' text ':' format."""
     return re.sub(':.+?:', '', string, count=1)
@@ -112,7 +127,11 @@ def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, f
 
 
 def strip_flair_to_just_tracker_account_name(string):
-    return ''
+    # Restrict the text to only be alpha-numeric, also have frontend validation on that
+    # Make sure no one sneaks a :emoji: - just ban : characters. Should be covered by alphanumeric
+    # Filter emoji out of user input if that isn't covered already. Believe some are considered alphanumeric.
+    return string
+
 
 def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
     """Edits the all_awarded_flairs list to set if a flair is 'checked' and in the users flair already."""
@@ -131,4 +150,19 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
         ls.append(awarded_flair)
 
     return ls
+
+
+
+
+
+
+# pre-populated user's tracker-account and tracker picked
+# 'required', no empty account
+
+
+
+#TODO: Make function to figure out what tracker and what emoji have been selected from a flair
+# so that the server can pre-populate them for the user
+
+
 
