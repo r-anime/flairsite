@@ -1,10 +1,9 @@
-import praw
-import random
-import webbrowser
-import socket
 import os
+import socket
+import praw
 from dotenv import load_dotenv
 from prawcore import NotFound
+
 from flair.models import ActionLogging
 
 
@@ -58,11 +57,10 @@ def reddit_setup():
     reddit = praw.Reddit(
         client_id=os.environ.get('REDDIT_CLIENT_ID'),
         client_secret=os.environ.get('REDDIT_SECRET'),
-        # redirect_uri="http://localhost:8080",
         username=os.environ.get('REDDIT_USERNAME'),
         user_agent=os.environ.get('REDDIT_USER_AGENT'),
         password=os.environ.get('REDDIT_USER_PASSWORD'),
-        redirect_uri='http://localhost:8080'
+        redirect_uri=os.environ.get('REDIRECT_URI'),
     )
 
     subreddit_name = os.environ.get('SUBREDDIT_NAME_TO_ACT_ON')
@@ -75,38 +73,9 @@ def reddit_setup():
 
     try:
         reddit.user.me()
-        # print('PRAW Reddit loaded with user: ' + reddit.user.me())
-        # print(reddit.user.me())
     except Exception as err:
-        if (str(err) != 'invalid_grant error processing request'):
+        if str(err) != 'invalid_grant error processing request':
             print('SERVER REDDIT LOGIN FAILURE')
-        else:
-            # TODO: Remove - this is all for multi-factor login and can't be run without user input
-            state = str(random.randint(0, 65000))
-            scopes = ['identity', 'history', 'read', 'edit']
-            url = reddit.auth.url(scopes, state, 'permanent')
-            print('We will now open a window in your browser to complete the login process to reddit.')
-            webbrowser.open(url)
-
-            client = receive_connection()
-            data = client.recv(1024).decode('utf-8')
-            param_tokens = data.split(' ', 2)[1].split('?', 1)[1].split('&')
-            params = {key: value for (key, value) in [token.split('=')
-                                                      for token in param_tokens]}
-
-            if state != params['state']:
-                send_message(client, 'State mismatch. Expected: {} Received: {}'
-                             .format(state, params['state']))
-                return 1
-            elif 'error' in params:
-                send_message(client, params['error'])
-                return 1
-
-            refresh_token = reddit.auth.authorize(params["code"])
-            send_message(client, "Refresh token: {}".format(refresh_token))
-
-            print(refresh_token)
-            return 0
 
 
 def check_flair_length(flair_to_set, username):

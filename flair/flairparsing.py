@@ -90,33 +90,33 @@ def tracker_type(flair_string):
 
 
 def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, flair_tracker_text_to_set,
-                         flair_tracker_user_to_set):
-    """Flair is limited to 64 characters, this method tries and cuts down longer flairs to fit"""
+                         flair_tracker_user_account):
+    """Flair is limited to 64 characters, this function runs filters on the entered text and tries and cuts down longer flairs to fit"""
     """It is assumed the longest tracker_text_to_set will be 51 characters. Eg:"""
     """https://anime-planet.com/users/12345678901234567890"""
     """This leaves the remaining space for award emoji"""
 
-    # TODO: Validate that flair submitted is a correct link
-    # TODO: Filter any emoji out of the user submitted portion
+    # Run text validation on the tracker-account they entered:
+    validated_tracker_user_account = tracker_account_name_validation(flair_tracker_user_account)
 
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + flair_tracker_user_to_set
+    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         # Great, no problems return it
         return full_length_string
 
     # Remove the "https://" and see if that fits
     flair_tracker_text_to_set = flair_tracker_text_to_set.replace("https://", "")
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + flair_tracker_user_to_set
+    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         return full_length_string
 
     # Cut the tracker emoji as well and see if that fits
-    full_length_string = flair_award_emoji_to_set + flair_tracker_text_to_set + flair_tracker_user_to_set
+    full_length_string = flair_award_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         return full_length_string
 
     # Just have the tracker site emoji and the users username
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_user_to_set
+    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         return full_length_string
 
@@ -173,6 +173,8 @@ def tracker_account_name_validation(string):
     # Make sure no one sneaks a :emoji: - just ban : characters. Should be covered by alphanumeric
     # Filter emoji out of user input if that isn't covered already. Believe some are considered alphanumeric.
     # TODO: validation of user submitted account name
+    # TODO: Validate that flair submitted is a correct link
+    # TODO: Filter any emoji out of the user submitted portion
     return string
 
 
