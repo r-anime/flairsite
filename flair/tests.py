@@ -1,8 +1,6 @@
 from django.test import TestCase
-from .redditflair import *
-from dotenv import load_dotenv
-from flair.models import FlairType, FlairsAwarded, ActionLogging
 from .flairparsing import *
+from .redditflair import *
 
 
 def setup_db():
@@ -113,6 +111,10 @@ class FlairParsingTests(TestCase):
         self.assertIs(strip_flair_to_tracker_account_name(existing1) == '', True)
         self.assertIs(strip_flair_to_tracker_account_name(existing2) == '', True)
 
+    def test_tracker_account_name_validation(self):
+        tracker1 = tracker_account_name_validation('spez 🍨✨🤣   -_.!@#$%^&*[]}{+/\\?:>\""')
+        self.assertIs(tracker1 == 'spez-_', True)
+
 
 class FlairModelTests(TestCase):
     def test_setup_db(self):
@@ -131,28 +133,27 @@ class FlairModelTests(TestCase):
 
 
 class RedditFlairTests(TestCase):
-    reddit_setup()  # TODO: make this into a test
+    reddit_setup()
     global username
     username = "spez"
 
     def test_get_environ(self):
         load_dotenv()
-        print('DEBUG: ' + os.environ.get('DEBUG'))
+        print('Testing DEBUG: ' + os.environ.get('DEBUG'))
 
     def test_check_user_exists(self):
         self.assertIs(check_user_exists(username), True)
 
+    #  NOTE: This test sometimes fails, looks to be the speed at which it set's and then immediately checks, probably Reddit caching something.
     def test_ensure_clear_flair_start(self):
         delete_flair(username)
         # print(get_flair(username))
         self.assertIs(get_flair(username).get('flair_text') == "", True)
         # self.assertIs(get_flair(username).get('flair_css_class') == "", True)
 
+    #  NOTE: This test sometimes fails, looks to be the speed at which it set's and then immediately checks, probably Reddit caching something.
     # def test_set_flair(self):
     #     set_flair(username, ":cake:", "")
-    #     # print(get_flair(username))
-    #     #  TODO: Sometimes this test fails, cache maybe returning old value because of speed?
-    #     print('flair print:')
     #     print(get_flair(username).get('flair_text'))
     #     self.assertIs(get_flair(username).get('flair_text') == ":cake:", True)
     #     delete_flair(username)

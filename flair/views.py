@@ -11,7 +11,6 @@ from .flairparsing import *
 from .redditflair import *
 
 
-# Create your views here.
 def sort_flairtype_by_order(elem):
     return elem.order
 
@@ -69,7 +68,8 @@ def set_flair_url(request):
 
         awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
         awarded_flairs.sort(key=sort_awarded_flairs_by_order)
-        awarded_flairs = find_already_set_flairs(awarded_flairs, current_emoji_flair_list) # Adds 'checked' status to objects
+        awarded_flairs = find_already_set_flairs(awarded_flairs,
+                                                 current_emoji_flair_list)  # Adds 'checked' status to objects
 
         default_flairs = list(FlairType.objects.filter(flair_type="default"))
         default_flairs.sort(key=sort_flairtype_by_order)
@@ -97,6 +97,7 @@ def setup_reddit_once():
     print('Reddit object initialized')
     setup_status = True
 
+
 @login_required
 def submit(request):
     """A view saving a user's response as their flair. Records a log in database, and redirecting them back to the index. Requires the user being logged in."""
@@ -110,7 +111,6 @@ def submit(request):
 
     if 'flair_reset_request' in request.POST:
         delete_flair(username)
-        # TODO: a redirect clears the form, find better or 'correct' way
         return redirect(request.META['HTTP_REFERER'])  # returns user back to /set page
 
     # Get allowed award flairs from the database and check only those (Server-side validation)
@@ -121,7 +121,7 @@ def submit(request):
     flair_award_emoji_to_set = ""
     flair_tracker_emoji_to_set = ""
     flair_tracker_text_to_set = ""
-    flair_tracker_user_to_set = ""
+    flair_tracker_user_account = ""
     flair_template_to_set = ""
 
     for flair_award in awarded_flairs:
@@ -135,10 +135,7 @@ def submit(request):
             # print("notracker")
             pass
         elif "trackerAccountName" in request.POST:
-            # TODO: Check if username is set or something
-            # print(request.POST)
-            # print(request.POST["defaultflair"])
-            # print(request.POST["trackerAccountName"])
+            # print(request.POST) # Debugging
 
             default_flairs = list(FlairType.objects.filter(flair_type="default"))
             for flairtype in default_flairs:
@@ -148,15 +145,13 @@ def submit(request):
                     #  Set both tracker icon and entered tracker name/id
                     flair_tracker_emoji_to_set = flairtype.reddit_flair_emoji
                     flair_tracker_text_to_set = flairtype.reddit_flair_text
-                    flair_tracker_user_to_set = request.POST["trackerAccountName"]
+                    flair_tracker_user_account = request.POST["trackerAccountName"]
                     flair_template_to_set = flairtype.reddit_flair_template_id
                     break
 
-    # flair_tracker_user_to_set = validate_tracker_account_name(flair_tracker_user_to_set)
-
     # Build the flair text that will then be set
     final_flair_to_set = flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set,
-                                              flair_tracker_text_to_set, flair_tracker_user_to_set)
+                                              flair_tracker_text_to_set, flair_tracker_user_account)
 
     # Finally set the flair on the subreddit, use the template way if one is set
     if flair_template_to_set == "":
@@ -164,5 +159,4 @@ def submit(request):
     else:
         set_flair_with_template(username, final_flair_to_set, flair_template_to_set)
 
-    # TODO: This redirects back to /set, maybe not what is needed
-    return redirect(request.META['HTTP_REFERER'])  # returns user back to /set page
+    return redirect(request.META['HTTP_REFERER']) # returns user back to /set page

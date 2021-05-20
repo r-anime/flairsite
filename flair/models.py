@@ -41,7 +41,6 @@ class ActionLogging(models.Model):
     error = models.CharField("Error message.", max_length=256)
     timestamp = models.DateTimeField('Timestamp of event.', default=timezone.now)
     user_agent = models.CharField("The user-agent string from the user.", max_length=65536, null=True)
-    # TODO: Save their browser/device information to have stats?
 
     def __str__(self):
         return "id=({}) action=({}) action_info=({}) reddit_name=({}) timestamp=({})".format(self.id, self.action, self.action_info, self.reddit_name, self.timestamp)

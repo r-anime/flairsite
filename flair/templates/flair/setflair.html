@@ -3,7 +3,10 @@
 
 {% block title %}{{ block.super }} - Set flair{% endblock %}
 
+
 {% block content %}
+
+<script src="{% static 'js/setflair.js' %}"></script>
 
 <link rel="stylesheet" type="text/css" href="{% static '/styles/setflair.css' %}">
 
@@ -15,21 +18,25 @@
                 <div class="section-title-grey">Please select your <span class="section-title-emphasis">Anime Tracking</span> flair:</div>
 
                 <div class="flair-list">
-                    <div class="list-card">
-                        <input type="radio" id="notracker" name="defaultflair" value="notracker" checked="checked">
+                    <label for="notracker">
+                    <div class="list-card" onclick="toggleCard()">
+                        <input type="radio" id="notracker" name="defaultflair" value="notracker" checked="checked" onclick="setAccountTrackerNotRequired()" required>
                         <label class="form-check-label" for="notracker">No Tracker</label>
-                    </div>                    
+                    </div>
+                    </label>
                         {% for flairtype in default_flairs %}
                         {% if flairtype.flair_type == "default" %}
+                        <label for="{{flairtype.display_name}}">
                         <div class="list-card">
                             {% if flairtype.display_name == tracker_name %}
-                                <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}" checked="checked">
+                                <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}" onclick="setAccountTrackerRequired()" checked="checked">
                             {% else %}
-                                <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}">
+                                <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}" onclick="setAccountTrackerRequired()">
                             {% endif %}
                             <label class="form-check-label" for="{{flairtype.display_name}}">{{flairtype.display_name}}</label>
                             <img src="{{flairtype.static_image}}">
-                        </div>         
+                        </div>
+                        </label>
                         {% endif %}
                     {% endfor %}           
                 </div>
@@ -42,6 +49,7 @@
         
                 <div class="flair-list">
                         {% for flair_awarded in allowed_flairs %}
+                        <label for="flairChoice{{flair_awarded.flair_id.id}}">
                         <div class="list-card">
                             {%if flair_awarded.flair_id.checked == True %}
                             <input type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
@@ -54,6 +62,7 @@
                             <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}} </label>
                             <img src="{{flair_awarded.flair_id.static_image}}">
                         </div>
+                        </label>
                         {% endfor %}
                 {% endif %}
                 </div>
@@ -68,7 +77,13 @@
                             <small class="form-text text-muted">* Not the full URL</small>
                             <label class="section-title-grey" for="trackerAccountName">Anime Tracker <span class="section-title-emphasis">Account Name</span>:</label>
                         </div>
-                        <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="{{tracker_user_account_name}}" placeholder="e.g: https://myanimelist.net/animelist/[ThisUsername]" maxlength="20">
+                        {% if tracker_name == "notracker" %}
+                            <!--No tracker, text not required-->
+                            <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="{{tracker_user_account_name}}" placeholder="e.g: https://myanimelist.net/animelist/[ThisUsername]" minlength="2" maxlength="20" disabled="disabled">
+                        {% else %}
+                            <!--Has tracker so text required-->
+                            <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="{{tracker_user_account_name}}" placeholder="e.g: https://myanimelist.net/animelist/[ThisUsername]" minlength="2" maxlength="20" required>
+                        {% endif %}
                         <div id="input-container">
                             <input class="blue-input" type="submit" value="Reset Flair" name="flair_reset_request">
                             <input class="blue-input" type="submit" value="Submit" name="flair_change_request">
