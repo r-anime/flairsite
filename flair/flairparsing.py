@@ -169,12 +169,14 @@ def strip_flair_to_tracker_account_name(string):
 
 
 def tracker_account_name_validation(string):
-    # Restrict the text to only be alpha-numeric, also have frontend validation on that
-    # Make sure no one sneaks a :emoji: - just ban : characters. Should be covered by alphanumeric
-    # Filter emoji out of user input if that isn't covered already. Believe some are considered alphanumeric.
-    # TODO: validation of user submitted account name
-    # TODO: Validate that flair submitted is a correct link
-    # TODO: Filter any emoji out of the user submitted portion
+    # MAL: letters, numbers, underscores and dashes only
+    # Anilist: The user name may only contain letters and numbers.
+    # anime planet:  Only letters or numbers (min 3, max 20)
+    # kitsu name can be anything, but 'slug' (url) is only letters numbers and underscores
+
+    # Allow only alphanumeric characters, also underscore and dash
+    string = re.sub(r'[^a-zA-Z0-9_-]+', '', string)
+
     return string
 
 
@@ -195,4 +197,3 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
         ls.append(awarded_flair)
 
     return ls
-

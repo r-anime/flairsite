@@ -79,10 +79,10 @@
                         </div>
                         {% if tracker_name == "notracker" %}
                             <!--No tracker, text not required-->
-                            <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="{{tracker_user_account_name}}" placeholder="e.g: https://myanimelist.net/animelist/[ThisUsername]" minlength="3" maxlength="20" disabled="disabled">
+                            <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="{{tracker_user_account_name}}" placeholder="e.g: https://myanimelist.net/animelist/[ThisUsername]" minlength="2" maxlength="20" disabled="disabled">
                         {% else %}
                             <!--Has tracker so text required-->
-                            <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="{{tracker_user_account_name}}" placeholder="e.g: https://myanimelist.net/animelist/[ThisUsername]" minlength="3" maxlength="20" required>
+                            <input class="form-control" type="text" id="trackerAccountName" name="trackerAccountName" value="{{tracker_user_account_name}}" placeholder="e.g: https://myanimelist.net/animelist/[ThisUsername]" minlength="2" maxlength="20" required>
                         {% endif %}
                         <div id="input-container">
                             <input class="blue-input" type="submit" value="Reset Flair" name="flair_reset_request">
