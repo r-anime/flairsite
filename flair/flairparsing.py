@@ -173,9 +173,10 @@ def tracker_account_name_validation(string):
     # Anilist: The user name may only contain letters and numbers.
     # anime planet:  Only letters or numbers (min 3, max 20)
     # kitsu name can be anything, but 'slug' (url) is only letters numbers and underscores
+    # Allows use of '/' so that you can add /animelist to end of your tracker name (and thus URL) if there is room available.
 
     # Allow only alphanumeric characters, also underscore and dash
-    string = re.sub(r'[^a-zA-Z0-9_-]+', '', string)
+    string = re.sub(r'[^a-zA-Z0-9_\-/]+', '', string)
 
     return string
 
