@@ -20,6 +20,7 @@ class FlairTypeAdmin(admin.ModelAdmin):
         'flair_type',
         'note',
         'wiki_display',
+        'wiki_title',
         'wiki_text',
         'static_image'
         )
