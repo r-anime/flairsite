@@ -16,10 +16,13 @@
                     {% for flairtype in wiki_flairs %}
                     {% if flairtype.flair_type == "default" %}
                     <li class="list-card">
-                        <!--  TODO: Display wiki_title in a way that is above the following rather than horizontally ordered.-->
-                        <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
+                        <div class="list-card-wiki-title-image">
+                            <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
+                            <img src="{{flairtype.static_image}}">
+                        </div>
+                            
                         <div class="wiki-item-text ">{{flairtype.wiki_text|safe}}</div>
-                        <img src="{{flairtype.static_image}}">
+                        
                     </li>
                     {% endif %}
                     {% endfor %}
@@ -34,10 +37,11 @@
                     {% for flairtype in wiki_flairs %}
                     {% if flairtype.flair_type == "award" %}
                     <li class="list-card">
-                        <!--  TODO: Display wiki_title in a way that is above the following rather than horizontally ordered.-->
-                        <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
-                        <div class="wiki-item-text">{{flairtype.wiki_text|safe}}</div>
-                        <img src="{{flairtype.static_image}}">
+                        <div class="list-card-wiki-title-image">
+                            <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
+                            <img src="{{flairtype.static_image}}">
+                        </div>                            
+                        <div class="wiki-item-text">{{flairtype.wiki_text|safe}}</div>                        
                     </li>
                     {% endif %}
                     {% endfor %}
