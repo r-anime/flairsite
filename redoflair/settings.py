@@ -27,11 +27,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = True if os.environ.get('DEBUG') else False
 
-ALLOWED_HOSTS = []
+allowed_hosts_env = os.environ.get('ALLOWED_HOSTS')
+ALLOWED_HOSTS = allowed_hosts_env.split(';') if allowed_hosts_env else []
 
-
+use_https = True if os.environ.get('USE_HTTPS') else False
+SESSION_COOKIE_SECURE = use_https
+CSRF_COOKIE_SECURE = use_https
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https' if use_https else 'http'
 
 # Application definition
 
