@@ -74,6 +74,8 @@ def tracker_type(flair_string):
 
     # This covers for when the account doesn't have a tracker emoji (ie: no space or if we allow as a policy) or is a legacy flair and is matching on URL's instead
 
+    if not flair_string:
+        return "notracker"
     if "anidb.net" in flair_string:
         return "Anidb"
     if "anilist.co" in flair_string:
