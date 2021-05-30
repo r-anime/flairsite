@@ -1,0 +1,39 @@
+name: Build and deploy
+
+# Update every time we push to the main branch
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Start SSH agent
+      uses: webfactory/ssh-agent@v0.4.1
+      with:
+        ssh-private-key: ${{ secrets.FLAIRSITE_SSH_KEY }}
+    - name: Pull latest changes to server
+      run: |
+        ssh -o StrictHostKeyChecking=no flairsite@flair.r-anime.moe /bin/bash << 'EOF'
+          # Causes this script to exit early and report a failure if any command errors
+          set -e
+
+          # Checkout latest changes from our repo, overwriting any local changes
+          cd "$HOME/flairsite"
+          git fetch --all
+          git reset --hard origin/main
+
+          # Install dependencies
+          /usr/bin/python3 -m pip install -r requirements.txt
+
+          # Run migrations, pulling environment variables from the .env file
+          /usr/bin/python3 manage.py migrate
+
+          # Collect all static files into STATIC_ROOT
+          /usr/bin/python3 manage.py collectstatic --noinput
+
+          # Restart the service to make the new stuff go live
+          sudo systemctl restart flairsite.service
+        EOF
