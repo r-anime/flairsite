@@ -111,7 +111,7 @@ def submit(request):
 
     if 'flair_reset_request' in request.POST:
         delete_flair(username)
-        return redirect(request.META['HTTP_REFERER'])  # returns user back to /set page
+        return redirect('/set')  # returns user back to /set page
 
     # Get allowed award flairs from the database and check only those (Server-side validation)
     awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
@@ -159,4 +159,4 @@ def submit(request):
     else:
         set_flair_with_template(username, final_flair_to_set, flair_template_to_set)
 
-    return redirect(request.META['HTTP_REFERER']) # returns user back to /set page
+    return redirect('/set')  # returns user back to /set page
