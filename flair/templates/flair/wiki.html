@@ -16,8 +16,13 @@
                     {% for flairtype in wiki_flairs %}
                     {% if flairtype.flair_type == "default" %}
                     <li class="list-card">
+                        <div class="list-card-wiki-title-image">
+                            <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
+                            <img src="{{flairtype.static_image}}">
+                        </div>
+                            
                         <div class="wiki-item-text ">{{flairtype.wiki_text|safe}}</div>
-                        <img src="{{flairtype.static_image}}">
+                        
                     </li>
                     {% endif %}
                     {% endfor %}
@@ -32,8 +37,11 @@
                     {% for flairtype in wiki_flairs %}
                     {% if flairtype.flair_type == "award" %}
                     <li class="list-card">
-                        <div class="wiki-item-text">{{flairtype.wiki_text|safe}}</div>
-                        <img src="{{flairtype.static_image}}">
+                        <div class="list-card-wiki-title-image">
+                            <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
+                            <img src="{{flairtype.static_image}}">
+                        </div>                            
+                        <div class="wiki-item-text">{{flairtype.wiki_text|safe}}</div>                        
                     </li>
                     {% endif %}
                     {% endfor %}
@@ -48,7 +56,7 @@
             new thread on that subreddit.</p> 
             
         <h5>Can I use anything as my flair?</h5> 
-        <p>No. You can have <span class="bold-info">1</span> flair for your main anime tracking service, like MyAnimeList or Anilist. This 
+        <p>No. You can have <span class="bold-info">1</span> flair for your main anime tracking service, like MyAnimeList or Anilist. This
             way, everyone will be able to see what you’re watching and perhaps 
             recommend things you would enjoy. We also allow you to select up to <span class="bold-info">10</span>  award flairs, 
             we hand these out during events we host throughout the year or to helpers who keep the sub running smoothly.</p>     

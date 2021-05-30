@@ -8,12 +8,32 @@
     padding-left: 0px;
 }
 
-.list-card .wiki-item-text {
-    color: #474747;
+.list-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
-.list-card {
-    width: 250px;
+.list-card .wiki-item-text, .list-card .wiki-item-title {
+    color: #474747;
+    word-wrap: break-word;
+    /* Total available space, minus the image, minus the padding to the edge */
+    max-width: calc(100% - 24px - 10px);
+}
+
+.list-card .wiki-item-title {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.list-card .wiki-item-text {
+    font-size:small;
+}
+.list-card-wiki-title-image {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 
@@ -48,5 +68,9 @@
 
     #info-box {
         margin: 0px 0px 0px auto;
+    }
+
+    .list-card {
+        width: 250px;
     }
 }

@@ -16,6 +16,7 @@ class FlairType(models.Model):
     note = models.CharField("An optional note about this flair.", default="", max_length=255, blank=True)
     order = models.IntegerField()  # used to order emojis/flairs when multiple added
     wiki_display = models.BooleanField(default=False)
+    wiki_title = models.CharField("Title of the flair displayed on the wiki.", default="", max_length=255, blank=True)
     wiki_text = models.CharField("Information displayed on the flair wiki page.", default="", max_length=65536, blank=True)
     static_image = models.CharField("Server image path. Used by wiki page.", default="", max_length=255, blank=True)
 
