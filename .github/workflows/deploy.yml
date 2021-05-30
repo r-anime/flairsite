@@ -23,7 +23,7 @@ jobs:
           # Checkout latest changes from our repo, overwriting any local changes
           cd "$HOME/flairsite"
           git fetch --all
-          git reset --hard origin/main
+          git reset --hard origin/master
 
           # Install dependencies
           /usr/bin/python3 -m pip install -r requirements.txt
