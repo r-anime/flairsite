@@ -34,7 +34,9 @@ You can make apps on Reddit [here](https://www.reddit.com/prefs/apps) for a logg
     * `SUBREDDIT_NAME_TO_ACT_ON` The subreddit that the project will edit flairs on.
     * `WEBSITE_REDDIT_OAUTH_CLIENT_ID` OAuth Web App Credentials.
     * `WEBSITE_REDDIT_OAUTH_SECRET` OAuth Web App Credentials.
-    * `DEBUG` Sets the website in debug mode or not.
+    * `DEBUG` Sets the website in debug mode or not. Unset to disable.
+    * `USE_HTTPS` Controls whether the site is hosted via HTTPS. Uses HTTPS for OAuth redirect URIs and enables additional security settings. Unset to disable.
+    * `ALLOWED_HOSTS` If `DEBUG` is not set, a list of hostnames where the application should be accessible, separated by semicolons. In debug mode, this setting is ignored and all hosts are allowed.
 
 * Create the website's database: `python manage.py migrate`.
 * Create a superuser for the website: `python manage.py createsuperuser`.
