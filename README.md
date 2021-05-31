@@ -1,4 +1,4 @@
-# [/r/anime User Flair Website](https://flair.r-anime.moe/)
+# [/r/anime User Flair Website](https://flair.r-anime.moe/) [![deploy status](https://img.shields.io/github/deployments/r-anime/flairsite/production?label=deploy)](https://github.com/r-anime/flairsite/deployments/activity_log?environment=production)
 
 Website for letting users set their own flair on [/r/anime](https://www.reddit.com/r/anime/). Built with [Django](https://www.djangoproject.com/) as the backend and [BootstrapVue](https://bootstrap-vue.org/) (Bootstrap and embedded Vue.js) on the frontend.
 
