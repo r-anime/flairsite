@@ -59,7 +59,12 @@
                             <input type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
                                 name="flairtype_{{flair_awarded.flair_id.display_name}}" value="{{flair_awarded.flair_id.display_name}}">
                             {% endif %}
-                            <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}} </label>
+
+                            {%if flair_awarded.awarded_count > 1 %}
+                            <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}} (x{{flair_awarded.awarded_count}})</label>
+                            {% else %}
+                            <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}}</label>
+                            {% endif %}
                             <img src="{{flair_awarded.flair_id.static_image}}">
                         </div>
                         </label>

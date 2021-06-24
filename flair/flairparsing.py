@@ -200,3 +200,26 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
         ls.append(awarded_flair)
 
     return ls
+
+
+def remove_duplicate_awarded_flairs(all_awarded_flairs):
+    """Edit find all award flairs that have the same type (duplicates) and remove one, putting information of there being more into a field"""
+
+    ls = []
+    flair_id_ls = []
+
+    for awarded_flair in all_awarded_flairs:
+        if awarded_flair.flair_id in flair_id_ls:
+            continue  # Done this ID already
+
+        count = 0
+        for flair in all_awarded_flairs:
+            if awarded_flair.flair_id == flair.flair_id:
+                count = count+1
+        if count > 1:
+            awarded_flair.awarded_count = count
+            print(awarded_flair)
+        flair_id_ls.append(awarded_flair.flair_id)  # Used to avoid duplicates by ID instead of object
+        ls.append(awarded_flair)
+
+    return ls
