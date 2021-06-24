@@ -66,7 +66,7 @@ def set_flair_url(request):
         tracker_name = tracker_type(current_flair)
         tracker_user_account_name = strip_flair_to_tracker_account_name(current_flair)
 
-        awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
+        awarded_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username))  # __iexact to be case insensitive
         awarded_flairs.sort(key=sort_awarded_flairs_by_order)
         awarded_flairs = find_already_set_flairs(awarded_flairs,
                                                  current_emoji_flair_list)  # Adds 'checked' status to objects
