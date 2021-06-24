@@ -115,7 +115,7 @@ def submit(request):
         return redirect('/set')  # returns user back to /set page
 
     # Get allowed award flairs from the database and check only those (Server-side validation)
-    awarded_flairs = list(FlairsAwarded.objects.filter(display_name=username))
+    awarded_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username))  # __iexact to be case insensitive
     # Sorts flairs by database flairtype 'order' value
     awarded_flairs.sort(key=sort_awarded_flairs_by_order)
 
