@@ -1,4 +1,4 @@
-Django==3.1.7
+Django==3.1.12
 django-allauth==0.44.0
 prawcore==1.4.0
 praw==6.5.1

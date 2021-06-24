@@ -14,6 +14,15 @@ jobs:
       uses: webfactory/ssh-agent@v0.4.1
       with:
         ssh-private-key: ${{ secrets.FLAIRSITE_SSH_KEY }}
+
+    - name: Create GitHub deployment
+      uses: chrnorm/deployment-action@v1.0.0
+      id: github_deployment
+      with:
+        token: ${{ github.token }}
+        target_url: https://flair.r-anime.moe
+        environment: production
+
     - name: Pull latest changes to server
       run: |
         ssh -o StrictHostKeyChecking=no flairsite@flair.r-anime.moe /bin/bash << 'EOF'
@@ -37,3 +46,19 @@ jobs:
           # Restart the service to make the new stuff go live
           sudo systemctl restart flairsite.service
         EOF
+
+    - name: Update deployment status (success)
+      if: success()
+      uses: chrnorm/deployment-status@v1.0.0
+      with:
+        token: ${{ github.token }}
+        state: success
+        deployment_id: ${{ steps.github_deployment.outputs.deployment_id }}
+
+    - name: Update deployment status (failure)
+      if: failure()
+      uses: chrnorm/deployment-status@v1.0.0
+      with:
+        token: ${{ github.token }}
+        state: failure
+        deployment_id: ${{ steps.github_deployment.outputs.deployment_id }}
