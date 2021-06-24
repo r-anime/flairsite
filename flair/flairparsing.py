@@ -218,7 +218,6 @@ def remove_duplicate_awarded_flairs(all_awarded_flairs):
                 count = count+1
         if count > 1:
             awarded_flair.awarded_count = count
-            print(awarded_flair)
         flair_id_ls.append(awarded_flair.flair_id)  # Used to avoid duplicates by ID instead of object
         ls.append(awarded_flair)
 
