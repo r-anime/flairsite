@@ -48,14 +48,14 @@ class ActionLoggingTests(TestCase):
     def test_flairset_creates_log(self):
         example_flair = ':cake::cake:'
         set_flair("spez", example_flair, "")
-        all_log = ActionLogging.objects.filter(reddit_name=username)
+        all_log = ActionLogging.objects.filter(reddit_name__iexact=username)
         self.assertIs(ActionLogging.objects.get(pk=1).reddit_name == "spez", True)
         self.assertIs(ActionLogging.objects.get(pk=1).action == "set_flair", True)
         self.assertIs(ActionLogging.objects.get(pk=1).action_info == example_flair, True)
 
     def test_deleteflair_creates_log(self):
         delete_flair(username)
-        all_log = ActionLogging.objects.filter(reddit_name=username)
+        all_log = ActionLogging.objects.filter(reddit_name__iexact=username)
         self.assertIs(ActionLogging.objects.get(pk=1).reddit_name == "spez", True)
         self.assertIs(ActionLogging.objects.get(pk=1).action == "delete_flair", True)
 
@@ -127,7 +127,7 @@ class FlairModelTests(TestCase):
     def test_user_get_FlairsAwarded(self):
         setup_db()
         username = "spez"
-        awarded_flairs = FlairsAwarded.objects.filter(display_name=username)
+        awarded_flairs = FlairsAwarded.objects.filter(display_name__iexact=username)
         self.assertIs(awarded_flairs.first().flair_id.display_name == 'Cake', True)
 
 

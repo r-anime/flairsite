@@ -72,7 +72,7 @@ def set_flair_url(request):
         awarded_flairs = find_already_set_flairs(awarded_flairs,
                                                  current_emoji_flair_list)  # Adds 'checked' status to objects
 
-        default_flairs = list(FlairType.objects.filter(flair_type="default"))
+        default_flairs = list(FlairType.objects.filter(flair_type__iexact="default"))
         default_flairs.sort(key=sort_flairtype_by_order)
 
         return render(request, 'flair/setflair.html', {
@@ -138,7 +138,7 @@ def submit(request):
         elif "trackerAccountName" in request.POST:
             # print(request.POST) # Debugging
 
-            default_flairs = list(FlairType.objects.filter(flair_type="default"))
+            default_flairs = list(FlairType.objects.filter(flair_type__iexact="default"))
             for flairtype in default_flairs:
                 # print(flairtype.display_name)
                 # Look for through database flairs to find what they have
