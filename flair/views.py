@@ -117,6 +117,7 @@ def submit(request):
     # Get allowed award flairs from the database and check only those (Server-side validation)
     awarded_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username))  # __iexact to be case insensitive
     # Sorts flairs by database flairtype 'order' value
+    awarded_flairs = remove_duplicate_awarded_flairs(awarded_flairs)
     awarded_flairs.sort(key=sort_awarded_flairs_by_order)
 
     flair_award_emoji_to_set = ""
