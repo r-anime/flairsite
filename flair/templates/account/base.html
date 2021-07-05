@@ -67,6 +67,10 @@
                         <img src="{% static 'github/GitHub-Mark-Light-32px.png' %}" alt="GitHub">
                     </a>
                 </li>
+
+                {% if request.user.is_staff %}
+                <li class="nav-item"><a class="nav-link nav-white-text nav-transform-scale" href="/admin">Admin</a></li>
+                {% endif %}
             </ul>
             <div class="ml-auto text-right">
 
