@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.views.generic import View
 
 from .flairparsing import *
+from .models import FlairDisplay
 from .redditflair import *
 
 
@@ -21,9 +22,21 @@ def sort_awarded_flairs_by_order(elem):
 
 def wiki(request):
     wiki_flairs = list(FlairType.objects.filter(wiki_display=True))
+    print(wiki_flairs)
     wiki_flairs.sort(key=sort_flairtype_by_order)
+    print(wiki_flairs)
+
+    #TODO: CLEANUP AND REMOVE
+    # for ft in wiki_flairs:
+    #     for s in ft.flair_display.all():
+    #         print(s.static_image)
+
+    # wiki_images = list(wiki_flairs.flair_display.static_image)
+    # print(wiki_images)
+    print("-------")
+
     return render(request, 'flair/wiki.html', {
-        'wiki_flairs': wiki_flairs,
+        'wiki_flairs': wiki_flairs
     })
 
 

@@ -18,7 +18,9 @@
                     <li class="list-card">
                         <div class="list-card-wiki-title-image">
                             <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
-                            <img src="{{flairtype.static_image}}">
+                            {% for flairdisplay in flairtype.flair_display.all %}
+                                <img src="{{flairdisplay.static_image}}">
+                            {% endfor %}
                         </div>
                             
                         <div class="wiki-item-text ">{{flairtype.wiki_text|safe}}</div>
@@ -35,11 +37,13 @@
                 <div class="section-title-grey">Flair Rewards</div>
                 <ul>
                     {% for flairtype in wiki_flairs %}
-                    {% if flairtype.flair_type == "award" %}
+                    {% if flairtype.flair_type == "award" or flairtype.flair_type == "tiered-award" %}
                     <li class="list-card">
                         <div class="list-card-wiki-title-image">
                             <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
-                            <img src="{{flairtype.static_image}}">
+                            {% for flairdisplay in flairtype.flair_display.all %}
+                                <img src="{{flairdisplay.static_image}}">
+                            {% endfor %}
                         </div>                            
                         <div class="wiki-item-text">{{flairtype.wiki_text|safe}}</div>                        
                     </li>

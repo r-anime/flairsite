@@ -7,23 +7,39 @@ from django.utils import timezone
 User = get_user_model()
 
 
+class FlairDisplay(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    is_tierd = models.BooleanField(default=False)
+    reddit_flair_emoji = models.CharField("Emoji that will be added if selected.", max_length=16)
+    static_image = models.CharField("Server image path. Used by wiki page.", default="", max_length=255, blank=True)
+    rank = models.IntegerField(default=0)  # used to indicate set's rank
+
+    def __str__(self):
+        return self.reddit_flair_emoji
+
+
 class FlairType(models.Model):
     id = models.BigAutoField(primary_key=True)
     display_name = models.CharField("Text displayed on django server for flair", max_length=64)
-    reddit_flair_emoji = models.CharField("Emoji that will be added if selected.", max_length=16)
+    # reddit_flair_emoji = models.CharField("Emoji that will be added if selected.", max_length=16)
     reddit_flair_text = models.CharField("Text that will be added if selected.", max_length=64, blank=True)
     reddit_flair_template_id = models.CharField("Reddit's Template ID to set if any", max_length=36, blank=True)
     FLAIR_TYPE_CHOICES = [('default', 'Default'), ('award', 'Award'), ('tiered-award', 'Tiered-Award'), ('temporary', 'Temporary')]
     flair_type = models.CharField("Flairs Type", default="default", choices=FLAIR_TYPE_CHOICES, max_length=255)
     note = models.CharField("An optional note about this flair.", default="", max_length=255, blank=True)
     order = models.IntegerField()  # used to order emojis/flairs when multiple added
-    wiki_display = models.BooleanField(default=False)
+    wiki_display = models.BooleanField(default=True)
     wiki_title = models.CharField("Title of the flair displayed on the wiki.", default="", max_length=255, blank=True)
     wiki_text = models.CharField("Information displayed on the flair wiki page.", default="", max_length=65536, blank=True)
-    static_image = models.CharField("Server image path. Used by wiki page.", default="", max_length=255, blank=True)
+    # static_image = models.CharField("Server image path. Used by wiki page.", default="", max_length=255, blank=True)
+    flair_display = models.ManyToManyField(FlairDisplay)
 
     def __str__(self):
         return self.display_name
+
+    def emoji_display(self):
+        return " | ".join([str(p) for p in self.flair_display.all()])
+
 
 
 class FlairsAwarded(models.Model):
