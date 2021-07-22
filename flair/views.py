@@ -142,7 +142,7 @@ def submit(request):
     for flair_award in awarded_flairs:
         flair_check_name = "flairtype_" + flair_award.flair_id.display_name
         if flair_check_name in request.POST:
-            flair_award_emoji_to_set = flair_award_emoji_to_set + flair_award.flair_id.reddit_flair_emoji  # Get from database what should be set
+            flair_award_emoji_to_set = flair_award_emoji_to_set + flair_award.flair_id.flair_display.reddit_flair_emoji  # Get from database what should be set
 
     # Sort out 'default' flair section
     if "defaultflair" in request.POST:
@@ -158,7 +158,7 @@ def submit(request):
                 # Look for through database flairs to find what they have
                 if request.POST["defaultflair"] == flairtype.display_name:
                     #  Set both tracker icon and entered tracker name/id
-                    flair_tracker_emoji_to_set = flairtype.reddit_flair_emoji
+                    flair_tracker_emoji_to_set = flairtype.flair_display.reddit_flair_emoji
                     flair_tracker_text_to_set = flairtype.reddit_flair_text
                     flair_tracker_user_account = request.POST["trackerAccountName"]
                     flair_template_to_set = flairtype.reddit_flair_template_id

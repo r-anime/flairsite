@@ -12,7 +12,7 @@ class FlairDisplay(models.Model):
     is_tierd = models.BooleanField(default=False)
     reddit_flair_emoji = models.CharField("Emoji that will be added if selected.", max_length=16)
     static_image = models.CharField("Server image path. Used by wiki page.", default="", max_length=255, blank=True)
-    rank = models.IntegerField(default=0)  # used to indicate set's rank
+    rank = models.IntegerField("If this is a tiered-award, what rank is it?", default=0)
 
     def __str__(self):
         return self.reddit_flair_emoji
@@ -41,12 +41,12 @@ class FlairType(models.Model):
         return " | ".join([str(p) for p in self.flair_display.all()])
 
 
-
 class FlairsAwarded(models.Model):
     flair_id = models.ForeignKey(FlairType, limit_choices_to=Q(flair_type='award') | Q(flair_type='tiered-award'), null=True, on_delete=models.SET_NULL)  # Links to what flair, or null if somehow deleted
     display_name = models.CharField("A reddit username", max_length=20)  # Reddit names can be max 20 characters
     date_added = models.DateTimeField(default=timezone.now, blank=True)
     note = models.CharField("An optional note on why this was awarded.", default="", max_length=255, blank=True)
+    tier_rank = models.IntegerField("If this is a tiered-award, what rank is it?", default=0)
 
     def __str__(self):
         return "{} : {}".format(self.display_name, self.flair_id)

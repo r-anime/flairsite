@@ -50,8 +50,9 @@ def users_current_awarded_flair_icons(flair_string):
 
     for emoji in ls:
         for flair_type in database:
-            if emoji == flair_type.reddit_flair_emoji:
-                awarded_flairs.append(flair_type)
+            for flair_display_element in flair_type.flair_display.all():
+                if emoji == flair_display_element.reddit_flair_emoji: #TODO: needs to check rank
+                    awarded_flairs.append(flair_type)
 
     return awarded_flairs
 
@@ -68,9 +69,14 @@ def tracker_type(flair_string):
         database = FlairType.objects.all()
         for emoji in ls:
             for flair_type in database:
-                if emoji == flair_type.reddit_flair_emoji:
-                    if flair_type.flair_type == 'default':
-                        return flair_type.display_name
+                for flair_display_element in flair_type.flair_display.all():  # Should only be one when 'default', no need to check tier-rank
+                    if emoji == flair_display_element.reddit_flair_emoji:
+                        if flair_type.flair_type == 'default':
+                            return flair_type.display_name
+
+                    # for flair_display_element in flair_type.flair_display.all():
+                    #     if emoji == flair_display_element.reddit_flair_emoji:  # TODO: needs to check rank
+                    #         awarded_flairs.append(flair_type)
 
     # This covers for when the account doesn't have a tracker emoji (ie: no space or if we allow as a policy) or is a legacy flair and is matching on URL's instead
 
