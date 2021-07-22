@@ -32,7 +32,7 @@ class FlairsAwarded(models.Model):
     date_added = models.DateTimeField(default=timezone.now, blank=True)
     note = models.CharField("An optional note on why this was awarded", default="", max_length=255, blank=True)
     override = models.BooleanField(default=False)
-    override_reddit_flair_emoji = models.CharField("Override Emoji", max_length=16, default="")
+    override_reddit_flair_emoji = models.CharField("Override Emoji", max_length=16, default="", blank=True)
     override_static_image = models.CharField("Server image path", default="", max_length=255, blank=True)
 
     def __str__(self):

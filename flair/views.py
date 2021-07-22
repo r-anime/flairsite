@@ -61,6 +61,7 @@ def set_flair_url(request):
 
         current_flair = get_flair(username).get("flair_text")
         current_emoji_flair_list = users_current_awarded_flair_icons(current_flair)
+
         stripped_flair = colon_emoji_strip(current_flair)
         stripped_flair_url = make_url_of_flair_text(stripped_flair)
         tracker_name = tracker_type(current_flair)
@@ -68,9 +69,12 @@ def set_flair_url(request):
 
         awarded_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username))  # __iexact to be case insensitive
         awarded_flairs.sort(key=sort_awarded_flairs_by_order)
+        awarded_flairs = check_awarded_flairs_overrides(awarded_flairs)  # Applies any overrides #TODO
         awarded_flairs = remove_duplicate_awarded_flairs(awarded_flairs)
-        awarded_flairs = find_already_set_flairs(awarded_flairs,
-                                                 current_emoji_flair_list)  # Adds 'checked' status to objects
+        awarded_flairs = find_already_set_flairs(awarded_flairs, current_emoji_flair_list)  # Adds 'checked' status to objects
+
+        # Fix up 'Flair Preview' section with overrides:
+        current_emoji_flair_list = apply_awarded_flairs_overrides(awarded_flairs, current_emoji_flair_list)
 
         default_flairs = list(FlairType.objects.filter(flair_type__iexact="default"))
         default_flairs.sort(key=sort_flairtype_by_order)
@@ -117,6 +121,7 @@ def submit(request):
     # Get allowed award flairs from the database and check only those (Server-side validation)
     awarded_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username))  # __iexact to be case insensitive
     # Sorts flairs by database flairtype 'order' value
+    awarded_flairs = check_awarded_flairs_overrides(awarded_flairs)
     awarded_flairs = remove_duplicate_awarded_flairs(awarded_flairs)
     awarded_flairs.sort(key=sort_awarded_flairs_by_order)
 

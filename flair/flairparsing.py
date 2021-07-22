@@ -202,6 +202,41 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
     return ls
 
 
+def check_awarded_flairs_overrides(all_awarded_flairs):
+    """Checks to see if any awarded flairs are overriden, if so, updates it for all that share the same type (thus duplicates work) and applys the overriden values"""
+
+    for awarded_flair in all_awarded_flairs:
+        if awarded_flair.override:
+            awarded_flair.flair_id.reddit_flair_emoji = awarded_flair.override_reddit_flair_emoji
+            awarded_flair.flair_id.static_image = awarded_flair.override_static_image
+
+    temp_awarded_flairs_ls = []
+    temp_awarded_flairs_ls.extend(all_awarded_flairs)
+
+    for awarded_flair in temp_awarded_flairs_ls:
+        if awarded_flair.override:
+            for real_flair in all_awarded_flairs:
+                if real_flair.flair_id == awarded_flair.flair_id:
+                    real_flair.flair_id.reddit_flair_emoji = awarded_flair.flair_id.reddit_flair_emoji
+                    real_flair.flair_id.static_image = awarded_flair.flair_id.static_image
+                    # TODO: Does not handle when user has been awarded twice, with two override flairs
+
+    return all_awarded_flairs
+
+
+def apply_awarded_flairs_overrides(all_awarded_flairs, current_selected_flair_list):
+    """Checks to see if any awarded flairs are overriden, if so, updates the CURRENT_EMOJI_FLAIR_LIST with the overriden values"""
+    """This fixes the 'Flair Preview' section when an override is made"""
+    for awarded_flair in all_awarded_flairs:
+        for currently_selected_flair in current_selected_flair_list:
+            if awarded_flair.flair_id == currently_selected_flair:
+                if awarded_flair.override:
+                    currently_selected_flair.reddit_flair_emoji = awarded_flair.override_reddit_flair_emoji
+                    currently_selected_flair.static_image = awarded_flair.override_static_image
+
+    return current_selected_flair_list
+
+
 def remove_duplicate_awarded_flairs(all_awarded_flairs):
     """Edit find all award flairs that have the same type (duplicates) and remove one, putting information of there being more into a field"""
 
