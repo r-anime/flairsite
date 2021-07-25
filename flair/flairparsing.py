@@ -195,8 +195,14 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
 
         matched = False
         for currently_selected_flair in current_selected_flair_list:
+            # Normal Check
             if awarded_flair.flair_id == currently_selected_flair:
                 matched = True
+            # Override check
+            if awarded_flair.override:
+                if awarded_flair.override_flair == currently_selected_flair:
+                    matched = True
+
         if matched:
             awarded_flair.flair_id.checked = True
         else:
@@ -211,8 +217,8 @@ def check_awarded_flairs_overrides(all_awarded_flairs):
 
     for awarded_flair in all_awarded_flairs:
         if awarded_flair.override:
-            awarded_flair.flair_id.reddit_flair_emoji = awarded_flair.override_reddit_flair_emoji
-            awarded_flair.flair_id.static_image = awarded_flair.override_static_image
+            awarded_flair.flair_id.reddit_flair_emoji = awarded_flair.override_flair.reddit_flair_emoji
+            awarded_flair.flair_id.static_image = awarded_flair.override_flair.static_image
 
     temp_awarded_flairs_ls = []
     temp_awarded_flairs_ls.extend(all_awarded_flairs)
@@ -221,6 +227,8 @@ def check_awarded_flairs_overrides(all_awarded_flairs):
         if awarded_flair.override:
             for real_flair in all_awarded_flairs:
                 if real_flair.flair_id == awarded_flair.flair_id:
+                    real_flair.override = True
+                    real_flair.override_flair = awarded_flair.override_flair
                     real_flair.flair_id.reddit_flair_emoji = awarded_flair.flair_id.reddit_flair_emoji
                     real_flair.flair_id.static_image = awarded_flair.flair_id.static_image
                     # TODO: Does not handle when user has been awarded twice, with two override flairs
@@ -235,8 +243,8 @@ def apply_awarded_flairs_overrides(all_awarded_flairs, current_selected_flair_li
         for currently_selected_flair in current_selected_flair_list:
             if awarded_flair.flair_id == currently_selected_flair:
                 if awarded_flair.override:
-                    currently_selected_flair.reddit_flair_emoji = awarded_flair.override_reddit_flair_emoji
-                    currently_selected_flair.static_image = awarded_flair.override_static_image
+                    currently_selected_flair.reddit_flair_emoji = awarded_flair.override_flair.reddit_flair_emoji
+                    currently_selected_flair.static_image = awarded_flair.override_flair.static_image
 
     return current_selected_flair_list
 

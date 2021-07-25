@@ -32,8 +32,7 @@ class FlairsAwarded(models.Model):
     date_added = models.DateTimeField(default=timezone.now, blank=True)
     note = models.CharField("An optional note on why this was awarded", default="", max_length=255, blank=True)
     override = models.BooleanField(default=False)
-    override_reddit_flair_emoji = models.CharField("Override Emoji", max_length=16, default="", blank=True)
-    override_static_image = models.CharField("Server image path", default="", max_length=255, blank=True)
+    override_flair = models.ForeignKey(FlairType, related_name='override_flair', limit_choices_to=Q(flair_type='override'), blank=True, null=True, on_delete=models.SET_NULL)  # Links to what flair, or null if somehow deleted
 
     def __str__(self):
         return "{} : {}".format(self.display_name, self.flair_id)

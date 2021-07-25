@@ -4,7 +4,7 @@ from .models import FlairType, FlairsAwarded, ActionLogging
 
 
 class FlairsAwardedAdmin(admin.ModelAdmin):
-    list_display = ('display_name', 'flair_id', 'date_added', 'note', 'override', 'override_reddit_flair_emoji', 'override_static_image')
+    list_display = ('display_name', 'flair_id', 'date_added', 'note', 'override', 'override_flair')
     list_filter = ['date_added']
     search_fields = ['display_name']
 
