@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.views.generic import View
 
 from .flairparsing import *
+from .models import FlairsAwarded
 from .redditflair import *
 
 
@@ -65,7 +66,7 @@ def set_flair_url(request):
         stripped_flair = colon_emoji_strip(current_flair)
         stripped_flair_url = make_url_of_flair_text(stripped_flair)
         tracker_name = tracker_type(current_flair)
-        tracker_user_account_name = strip_flair_to_tracker_account_name(current_flair)
+        tracker_user_account_name = strip_flair_to_tracker_account_name(current_flair) # TODO: Also needs to strip out x2 x3 x4 etc
 
         awarded_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username))  # __iexact to be case insensitive
         awarded_flairs.sort(key=sort_awarded_flairs_by_order)
@@ -134,7 +135,7 @@ def submit(request):
     for flair_award in awarded_flairs:
         flair_check_name = "flairtype_" + flair_award.flair_id.display_name
         if flair_check_name in request.POST:
-            flair_award_emoji_to_set = flair_award_emoji_to_set + flair_award.flair_id.reddit_flair_emoji  # Get from database what should be set
+            flair_award_emoji_to_set = flair_award_emoji_to_set + get_award_flair_emoji_text(flair_award)
 
     # Sort out 'default' flair section
     if "defaultflair" in request.POST:

@@ -1,6 +1,6 @@
 import re
 
-from flair.models import FlairsAwarded, FlairType
+from flair.models import FlairType
 
 """A set of functions for turning strings to recognised flair emoji"""
 
@@ -9,7 +9,7 @@ def colon_emoji_strip(string):
     """Takes string and removes ALL :emoji: from the front in ':' text ':' format."""
     if string is None:
         return ''  # If empty or None return empty string
-    return re.sub(':.+?:', '', string)
+    return re.sub(':.+?:(x[0-9]+)*', '', string)  # Replaces x2 x3... from the end of :emoji:
 
 
 def make_url_of_flair_text(string):
@@ -213,7 +213,7 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
 
 
 def check_awarded_flairs_overrides(all_awarded_flairs):
-    """Checks to see if any awarded flairs are overriden, if so, updates it for all that share the same type (thus duplicates work) and applys the overriden values"""
+    """Checks to see if any awarded flairs are overriden, if so, updates it for all that share the same type (thus duplicates work) and applies the overriden values"""
 
     for awarded_flair in all_awarded_flairs:
         if awarded_flair.override:
@@ -263,9 +263,21 @@ def remove_duplicate_awarded_flairs(all_awarded_flairs):
         for flair in all_awarded_flairs:
             if awarded_flair.flair_id == flair.flair_id:
                 count = count+1
-        if count > 1:
-            awarded_flair.awarded_count = count
+
+        # Set count of the number of times against this AwardedFlair object
+        awarded_flair.awarded_count = count
+
         flair_id_ls.append(awarded_flair.flair_id)  # Used to avoid duplicates by ID instead of object
         ls.append(awarded_flair)
 
     return ls
+
+
+def get_award_flair_emoji_text(flair_award):
+    """Gets the award flair emoji, and wraps a x2x3x4... if it has been awarded more than once"""
+
+    award_flair_text = flair_award.flair_id.reddit_flair_emoji
+    if flair_award.awarded_count > 1:
+        award_flair_text += 'x' + str(flair_award.awarded_count)
+
+    return award_flair_text
