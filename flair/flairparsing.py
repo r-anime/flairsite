@@ -40,6 +40,10 @@ def get_all_colon_emoji(string):
 
 def users_current_awarded_flair_icons(flair_string):
     """Builds a list of FlairType flair's the user is currently using. No validation on a user, just shows what they have already."""
+
+    # TODO: Override now creates a problem here; we can't reverse back to display a flair.
+    # Needs to be placed in database to exist for display back.
+
     awarded_flairs = []
 
     if flair_string is None:
