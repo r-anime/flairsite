@@ -102,6 +102,9 @@
                     <div id="{{tracker_name}}box" class="track-box" style="color:white">
                         {% for flair_image in current_emoji_flair_list %}
                             <img class="d-inline-block align-top" src="{{flair_image.static_image}}">
+                            {% if flair_image.awarded_count > 1 %}
+                                x{{flair_image.awarded_count}}
+                            {% endif %}
                         {% endfor %}
                         <a href="{{current_flair_url}}" target="_blank" style="color:white">{{current_flair_text}}</a>
                     </div>

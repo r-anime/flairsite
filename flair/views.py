@@ -66,7 +66,7 @@ def set_flair_url(request):
         stripped_flair = colon_emoji_strip(current_flair)
         stripped_flair_url = make_url_of_flair_text(stripped_flair)
         tracker_name = tracker_type(current_flair)
-        tracker_user_account_name = strip_flair_to_tracker_account_name(current_flair) # TODO: Also needs to strip out x2 x3 x4 etc
+        tracker_user_account_name = strip_flair_to_tracker_account_name(current_flair)
 
         awarded_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username))  # __iexact to be case insensitive
         awarded_flairs.sort(key=sort_awarded_flairs_by_order)
@@ -74,7 +74,7 @@ def set_flair_url(request):
         awarded_flairs = remove_duplicate_awarded_flairs(awarded_flairs)
         awarded_flairs = find_already_set_flairs(awarded_flairs, current_emoji_flair_list)  # Adds 'checked' status to objects
 
-        # Fix up 'Flair Preview' section with overrides:
+        # Fix up 'Flair Preview' section with overrides, also if a user has multiple wins (x2,x3,x4...):
         current_emoji_flair_list = apply_awarded_flairs_overrides(awarded_flairs, current_emoji_flair_list)
 
         default_flairs = list(FlairType.objects.filter(flair_type__iexact="default"))

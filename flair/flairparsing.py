@@ -215,6 +215,7 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
 def check_awarded_flairs_overrides(all_awarded_flairs):
     """Checks to see if any awarded flairs are overriden, if so, updates it for all that share the same type (thus duplicates work) and applies the overriden values"""
 
+    # Set override for the instance itself
     for awarded_flair in all_awarded_flairs:
         if awarded_flair.override:
             awarded_flair.flair_id.reddit_flair_emoji = awarded_flair.override_flair.reddit_flair_emoji
@@ -223,8 +224,10 @@ def check_awarded_flairs_overrides(all_awarded_flairs):
     temp_awarded_flairs_ls = []
     temp_awarded_flairs_ls.extend(all_awarded_flairs)
 
+    # Use copy of our list; so safe edits can be made to the list we are iterating over
     for awarded_flair in temp_awarded_flairs_ls:
         if awarded_flair.override:
+            # Now set that override on every other award that is of the same base type
             for real_flair in all_awarded_flairs:
                 if real_flair.flair_id == awarded_flair.flair_id:
                     real_flair.override = True
@@ -241,10 +244,15 @@ def apply_awarded_flairs_overrides(all_awarded_flairs, current_selected_flair_li
     """This fixes the 'Flair Preview' section when an override is made"""
     for awarded_flair in all_awarded_flairs:
         for currently_selected_flair in current_selected_flair_list:
-            if awarded_flair.flair_id == currently_selected_flair:
-                if awarded_flair.override:
+            if awarded_flair.override:
+                if awarded_flair.override_flair == currently_selected_flair:
+                    # Fix up award_counts when overriden:
+                    currently_selected_flair.awarded_count = awarded_flair.awarded_count
                     currently_selected_flair.reddit_flair_emoji = awarded_flair.override_flair.reddit_flair_emoji
                     currently_selected_flair.static_image = awarded_flair.override_flair.static_image
+            if awarded_flair.flair_id == currently_selected_flair:
+                # Fix up award_counts when not overriden:
+                currently_selected_flair.awarded_count = awarded_flair.awarded_count
 
     return current_selected_flair_list
 
