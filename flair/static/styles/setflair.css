@@ -53,7 +53,9 @@
   /* Stupid scroll views always requiring dirty hacks to make things pretty */
   margin: 0px -32px;
   padding: 0px 32px;
+  margin-right: 8px;
 }
+
 
 /* Previews */
 
@@ -91,7 +93,15 @@
 }
 
 
-
+/* For Desktop */
+@media only screen and (min-width: 768px) {
+  .flair-list {
+    overflow: hidden;
+  }
+  .flair-list:hover {
+    overflow: auto;
+  }
+}
 
 
 
