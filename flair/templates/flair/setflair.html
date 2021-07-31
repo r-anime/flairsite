@@ -45,18 +45,18 @@
             <div class="col-md">
                 {%if allowed_flairs %}
                 <!-- only display award flairs if they have any  -->
-                <div class="section-title-grey">Select any number of additional <span class="section-title-emphasis">Awarded</span> flairs:</div>
+                <div class="section-title-grey">Select up to <span class="section-title-emphasis">two</span> Awarded flairs:</div>
         
                 <div class="flair-list">
                         {% for flair_awarded in allowed_flairs %}
                         <label for="flairChoice{{flair_awarded.flair_id.id}}">
                         <div class="list-card">
                             {%if flair_awarded.flair_id.checked == True %}
-                            <input type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
+                            <input class="input-check" type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
                                 name="flairtype_{{flair_awarded.flair_id.display_name}}" value="{{flair_awarded.flair_id.display_name}}"
                                 checked="checked">
                             {% else %}
-                            <input type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
+                            <input class="input-check" type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
                                 name="flairtype_{{flair_awarded.flair_id.display_name}}" value="{{flair_awarded.flair_id.display_name}}">
                             {% endif %}
 
@@ -117,6 +117,7 @@
     </div>
 </form>
 
+<script src="{% static 'js/flaircap.js' %}"></script>
 
 
 {% endblock %}

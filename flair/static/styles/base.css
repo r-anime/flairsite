@@ -142,3 +142,8 @@ img#ranime-icon{
     height: 24px;
     margin-left: auto;
   }
+
+.greyout {
+  opacity: 0.2;
+  filter: grayscale(100%);
+}

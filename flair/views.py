@@ -132,10 +132,15 @@ def submit(request):
     flair_tracker_user_account = ""
     flair_template_to_set = ""
 
+    # Backend check to enforce that no more than X (hardcoded currently as 2) award_flairs are set
+    flaircap = 2
+
     for flair_award in awarded_flairs:
         flair_check_name = "flairtype_" + flair_award.flair_id.display_name
         if flair_check_name in request.POST:
-            flair_award_emoji_to_set = flair_award_emoji_to_set + get_award_flair_emoji_text(flair_award)
+            if flaircap > 0:
+                flaircap -= 1
+                flair_award_emoji_to_set = flair_award_emoji_to_set + get_award_flair_emoji_text(flair_award)
 
     # Sort out 'default' flair section
     if "defaultflair" in request.POST:
