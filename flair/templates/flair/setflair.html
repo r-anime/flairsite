@@ -52,11 +52,11 @@
                         <label for="flairChoice{{flair_awarded.flair_id.id}}">
                         <div class="list-card">
                             {%if flair_awarded.flair_id.checked == True %}
-                            <input type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
+                            <input class="input-check" type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
                                 name="flairtype_{{flair_awarded.flair_id.display_name}}" value="{{flair_awarded.flair_id.display_name}}"
                                 checked="checked">
                             {% else %}
-                            <input type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
+                            <input class="input-check" type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
                                 name="flairtype_{{flair_awarded.flair_id.display_name}}" value="{{flair_awarded.flair_id.display_name}}">
                             {% endif %}
 
@@ -117,6 +117,7 @@
     </div>
 </form>
 
+<script src="{% static 'js/flaircap.js' %}"></script>
 
 
 {% endblock %}
