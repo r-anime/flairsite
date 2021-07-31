@@ -3,6 +3,7 @@ const max = 2;
 for (let i = 0; i < checks.length; i++){
   checks[i].onclick = selectiveCheck;
 }
+
 function selectiveCheck (event) {
   const checkedChecks = document.querySelectorAll(".input-check:checked");
     //if length is equal to max, this means we should grey out all other options
@@ -10,6 +11,8 @@ function selectiveCheck (event) {
         for (let i = 0; i < checks.length; i++){
             if(!checks[i].checked){
                 checks[i].classList.add("greyout")
+                checks[i].setAttribute("disabled","disabled")
+
             }
         }
     }
@@ -18,6 +21,7 @@ function selectiveCheck (event) {
         for (let i = 0; i < checks.length; i++){
             if(!checks[i].checked){
                 checks[i].classList.remove("greyout")
+                checks[i].removeAttribute("disabled")
             }
         }
     }
@@ -26,5 +30,7 @@ function selectiveCheck (event) {
   if (checkedChecks.length >= max + 1){
       return false;
   }
-    
 }
+
+// Run once on page load so that if they have the maximum number of boxes checked - the others get turned off
+document.onload(selectiveCheck())

@@ -145,4 +145,5 @@ img#ranime-icon{
 
 .greyout {
   opacity: 0.2;
+  filter: grayscale(100%);
 }
