@@ -188,7 +188,7 @@ def tracker_account_name_validation(string):
     # Allows use of '/' so that you can add /animelist to end of your tracker name (and thus URL) if there is room available.
 
     # Allow only alphanumeric characters, also underscore and dash
-    string = re.sub(r'[^a-zA-Z0-9_\-/]+', '', string)
+    string = re.sub(r'[^a-zA-Z0-9_\-]+', '', string)
 
     return string
 
