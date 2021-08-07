@@ -105,6 +105,12 @@ def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, f
     # Run text validation on the tracker-account they entered:
     validated_tracker_user_account = tracker_account_name_validation(flair_tracker_user_account)
 
+    # Check that the submitted tracker 'username' is at most 20 characters (backend check)
+    # If its longer, we are not going to set it (just selected awards)
+    if len(validated_tracker_user_account) > 20:
+        full_length_string = flair_award_emoji_to_set
+        return full_length_string
+
     full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         # Great, no problems return it
