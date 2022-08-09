@@ -53,13 +53,19 @@ def reddit_setup():
     global subreddit_name
     load_dotenv()
 
+    password = os.environ.get('REDDIT_USER_PASSWORD')
+    totp_secret = os.environ.get('REDDIT_TOTP_SECRET')
+    if totp_secret:
+        import mintotp
+        password = f"{password}:{mintotp.totp(totp_secret)}"
+
     # SCRIPT FORMAT
     reddit = praw.Reddit(
         client_id=os.environ.get('REDDIT_CLIENT_ID'),
         client_secret=os.environ.get('REDDIT_SECRET'),
         username=os.environ.get('REDDIT_USERNAME'),
         user_agent=os.environ.get('REDDIT_USER_AGENT'),
-        password=os.environ.get('REDDIT_USER_PASSWORD'),
+        password=password,
         redirect_uri=os.environ.get('REDIRECT_URI'),
     )
 
@@ -70,6 +76,7 @@ def reddit_setup():
     # print('DEBUG: ' + os.environ.get('REDDIT_USERNAME'))
     # print('DEBUG: ' + os.environ.get('REDDIT_USER_AGENT'))
     # print('DEBUG: ' + os.environ.get('REDDIT_USER_PASSWORD'))
+    # print('DEBUG: ' + os.environ.get('REDDIT_TOTP_SECRET'))
 
     try:
         reddit.user.me()
