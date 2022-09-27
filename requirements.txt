@@ -3,3 +3,4 @@ django-allauth==0.44.0
 prawcore==1.4.0
 praw==6.5.1
 python-dotenv==0.17.1
+mintotp==0.3.0
