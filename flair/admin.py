@@ -13,6 +13,7 @@ class FlairTypeAdmin(admin.ModelAdmin):
     list_display = (
         'display_name',
         'id',
+        'display_image',
         'order',
         'reddit_flair_emoji',
         'reddit_flair_text',

@@ -71,23 +71,23 @@ class FlairParsingTests(TestCase):
         colon_emoji_stripper_flair = colon_emoji_strip_single(example_flair)
         self.assertIs(':star::ANI:https://anilist.co/user/spez' == colon_emoji_stripper_flair, True)
 
-    def test_get_all_enoji(self):
+    def test_get_all_emoji(self):
         example_flair = ':cake::star::ANI:https://anilist.co/user/spez'
         all_colon_emoji = get_all_colon_emoji(example_flair)
         ls = [':cake:', ':star:', ':ANI:']
         self.assertIs(ls == all_colon_emoji, True)
 
-    def test_get_all_enoji_none(self):
+    def test_get_all_emoji_none(self):
         example_flair = ''
         all_colon_emoji = get_all_colon_emoji(example_flair)
         ls = []
         self.assertIs(ls == all_colon_emoji, True)
 
-    def test_get_all_enoji_with_database(self):
+    def test_get_all_emoji_with_database(self):
         setup_db()
         example_flair = ':cake::upvote::ANI:https://anilist.co/user/spez'
         ls = [FlairType.objects.get(id=1), FlairType.objects.get(id=2), FlairType.objects.get(id=7)]
-        awarded_flairs_list = users_current_awarded_flair_icons(example_flair)
+        awarded_flairs_list = parse_flair_types(example_flair)
         self.assertIs(ls == awarded_flairs_list, True)
 
     def test_strip_to_tracker_name(self):

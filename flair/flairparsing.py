@@ -38,7 +38,7 @@ def get_all_colon_emoji(string):
     return reg_exp_obj.findall(string)
 
 
-def users_current_awarded_flair_icons(flair_string):
+def parse_flair_types(flair_string):
     """Builds a list of FlairType flair's the user is currently using. No validation on a user, just shows what they have already."""
 
     # TODO: Override now creates a problem here; we can't reverse back to display a flair.
@@ -49,13 +49,11 @@ def users_current_awarded_flair_icons(flair_string):
     if flair_string is None:
         return awarded_flairs  # If empty or None return nothing
 
-    ls = get_all_colon_emoji(flair_string)
     database = FlairType.objects.all()
 
-    for emoji in ls:
-        for flair_type in database:
-            if emoji == flair_type.reddit_flair_emoji:
-                awarded_flairs.append(flair_type)
+    for flair_type in database:
+        if flair_type.reddit_flair_emoji in flair_string:
+            awarded_flairs.append(flair_type)
 
     return awarded_flairs
 
@@ -73,7 +71,7 @@ def tracker_type(flair_string):
         for emoji in ls:
             for flair_type in database:
                 if emoji == flair_type.reddit_flair_emoji:
-                    if flair_type.flair_type == 'default':
+                    if flair_type.flair_type == 'list':
                         return flair_type.display_name
 
     # This covers for when the account doesn't have a tracker emoji (ie: no space or if we allow as a policy) or is a legacy flair and is matching on URL's instead
@@ -95,7 +93,7 @@ def tracker_type(flair_string):
     return "notracker"
 
 
-def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, flair_tracker_text_to_set,
+def flair_length_builder(flair_general_emoji_to_set, flair_award_emoji_to_set, flair_tracker_emoji_to_set, flair_tracker_text_to_set,
                          flair_tracker_user_account):
     """Flair is limited to 64 characters, this function runs filters on the entered text and tries and cuts down longer flairs to fit"""
     """It is assumed the longest tracker_text_to_set will be 51 characters. Eg:"""
@@ -111,24 +109,29 @@ def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, f
         full_length_string = flair_award_emoji_to_set
         return full_length_string
 
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         # Great, no problems return it
         return full_length_string
 
     # Remove the "https://" and see if that fits
     flair_tracker_text_to_set = flair_tracker_text_to_set.replace("https://", "")
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         return full_length_string
 
     # Cut the tracker emoji as well and see if that fits
-    full_length_string = flair_award_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         return full_length_string
 
     # Just have the tracker site emoji and the users username
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + validated_tracker_user_account
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set + flair_tracker_emoji_to_set + validated_tracker_user_account
+    if len(full_length_string) <= 64:
+        return full_length_string
+
+    # Cut out the tracker entirely if it's still too long
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set
     if len(full_length_string) <= 64:
         return full_length_string
 
@@ -193,9 +196,21 @@ def tracker_account_name_validation(string):
     return string
 
 
-def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
+def find_already_set_general_flairs(general_flairs, current_selected_flair_list):
+    """Edits the general_flairs list to set if a flair is 'checked' and in the users flair already."""
+
+    for flair in general_flairs:
+
+        flair.checked = False
+        for currently_selected_flair in current_selected_flair_list:
+            # Normal Check
+            if flair == currently_selected_flair:
+                flair.checked = True
+                break
+
+
+def find_already_set_award_flairs(all_awarded_flairs, current_selected_flair_list):
     """Edits the all_awarded_flairs list to set if a flair is 'checked' and in the users flair already."""
-    ls = []
 
     for awarded_flair in all_awarded_flairs:
 
@@ -213,9 +228,6 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
             awarded_flair.flair_id.checked = True
         else:
             awarded_flair.flair_id.checked = False
-        ls.append(awarded_flair)
-
-    return ls
 
 
 def check_awarded_flairs_overrides(all_awarded_flairs):

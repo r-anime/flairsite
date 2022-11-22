@@ -43,6 +43,14 @@
   margin-bottom: 0px;
 }
 
+.list-card-general {
+  width: 300px;
+}
+
+.type-custom-label {
+  font-weight: bold;
+}
+
 .flair-list{
   display: flex;
   flex-direction: column;
@@ -68,6 +76,10 @@
   margin-top: 8px;
   margin-bottom: 16px;
 }
+.track-box img {
+  height: 24px;
+}
+
 #notrackerbox {
   background-color: #dadada ;
 }

@@ -14,24 +14,52 @@
     {% csrf_token %}
     <div class="container custom-container">
         <div class="row">
+            <div class="col-xl">
+                <div class="section-title-grey">Select <span class="section-title-emphasis">one</span> General flair:</div>
+
+                <div class="flair-list">
+                    {% for flair_general in general_flairs %}
+                    <label for="flairChoice{{flair_general.id}}">
+                        <div class="list-card list-card-general">
+                            {%if flair_general.checked == True %}
+                            <input type="radio" id="flairChoice{{flair_general.id}}"
+                                   name="generalflair" value="{{flair_general.id}}"
+                                   checked="checked">
+                            {% else %}
+                            <input type="radio"  id="flairChoice{{flair_general.id}}"
+                                   name="generalflair" value="{{flair_general.id}}">
+                            {% endif %}
+                            {%if flair_general.flair_type == "custom" %}
+                                <label for="flairChoice{{flair_general.id}}" class="type-custom-label">{{flair_general.display_name}}</label>
+                            {% else %}
+                                <label for="flairChoice{{flair_general.id}}">{{flair_general.display_name}}</label>
+                            {% endif %}
+                            <img src="{{flair_general.static_image}}">
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md">
                 <div class="section-title-grey">Please select your <span class="section-title-emphasis">Anime Tracking</span> flair:</div>
 
                 <div class="flair-list">
                     <label for="notracker">
                     <div class="list-card" onclick="toggleCard()">
-                        <input type="radio" id="notracker" name="defaultflair" value="notracker" checked="checked" onclick="setAccountTrackerNotRequired()" required>
+                        <input type="radio" id="notracker" name="trackerflair" value="notracker" checked="checked" onclick="setAccountTrackerNotRequired()" required>
                         <label class="form-check-label" for="notracker">No Tracker</label>
                     </div>
                     </label>
-                        {% for flairtype in default_flairs %}
-                        {% if flairtype.flair_type == "default" %}
+                        {% for flairtype in tracker_flairs %}
+                        {% if flairtype.flair_type == "list" %}
                         <label for="{{flairtype.display_name}}">
                         <div class="list-card">
                             {% if flairtype.display_name == tracker_name %}
-                                <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}" onclick="setAccountTrackerRequired()" checked="checked">
+                                <input type="radio" id="{{flairtype.display_name}}" name="trackerflair" value="{{flairtype.display_name}}" onclick="setAccountTrackerRequired()" checked="checked">
                             {% else %}
-                                <input type="radio" id="{{flairtype.display_name}}" name="defaultflair" value="{{flairtype.display_name}}" onclick="setAccountTrackerRequired()">
+                                <input type="radio" id="{{flairtype.display_name}}" name="trackerflair" value="{{flairtype.display_name}}" onclick="setAccountTrackerRequired()">
                             {% endif %}
                             <label class="form-check-label" for="{{flairtype.display_name}}">{{flairtype.display_name}}</label>
                             <img src="{{flairtype.static_image}}">
@@ -45,7 +73,7 @@
             <div class="col-md">
                 {%if allowed_flairs %}
                 <!-- only display award flairs if they have any  -->
-                <div class="section-title-grey">Select up to <span class="section-title-emphasis">two</span> Awarded flairs:</div>
+                <div class="section-title-grey">Select up to <span class="section-title-emphasis">two</span> Achievement flairs:</div>
         
                 <div class="flair-list">
                         {% for flair_awarded in allowed_flairs %}
@@ -69,8 +97,8 @@
                         </div>
                         </label>
                         {% endfor %}
-                {% endif %}
                 </div>
+                {% endif %}
                 
             </div>
         </div>

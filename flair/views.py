@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views.generic import View
 
 from .flairparsing import *
-from .models import FlairsAwarded
+from .models import FlairsAwarded, FlairType
 from .redditflair import *
 
 
@@ -61,34 +61,44 @@ def set_flair_url(request):
     if check_user_exists(username):
 
         current_flair = get_flair(username).get("flair_text")
-        current_emoji_flair_list = users_current_awarded_flair_icons(current_flair)
+        current_emoji_flair_list = parse_flair_types(current_flair)
 
         stripped_flair = colon_emoji_strip(current_flair)
         stripped_flair_url = make_url_of_flair_text(stripped_flair)
         tracker_name = tracker_type(current_flair)
         tracker_user_account_name = strip_flair_to_tracker_account_name(current_flair)
 
-        awarded_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username))  # __iexact to be case insensitive
+        # Include dummy None flair if they want to clear their general choice
+        none_type = FlairType()
+        none_type.id = 0
+        none_type.display_name = "None"
+        general_flairs = list(FlairType.objects.filter(flair_type__exact="general"))
+        custom_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username).filter(flair_id__flair_type="custom"))
+        general_flairs = [none_type] + [custom_flair.flair_id for custom_flair in custom_flairs] + general_flairs
+        find_already_set_general_flairs(general_flairs, current_emoji_flair_list)  # Adds 'checked' status to objects
+
+        awarded_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username).filter(flair_id__flair_type="achievement"))  # __iexact to be case insensitive
         awarded_flairs.sort(key=sort_awarded_flairs_by_order)
         awarded_flairs = check_awarded_flairs_overrides(awarded_flairs)  # Applies any overrides
         awarded_flairs = remove_duplicate_awarded_flairs(awarded_flairs)
-        awarded_flairs = find_already_set_flairs(awarded_flairs, current_emoji_flair_list)  # Adds 'checked' status to objects
+        find_already_set_award_flairs(awarded_flairs, current_emoji_flair_list)  # Adds 'checked' status to objects
 
         # Fix up 'Flair Preview' section with overrides, also if a user has multiple wins (x2,x3,x4...):
         current_emoji_flair_list = apply_awarded_flairs_overrides(awarded_flairs, current_emoji_flair_list)
 
-        default_flairs = list(FlairType.objects.filter(flair_type__iexact="default"))
-        default_flairs.sort(key=sort_flairtype_by_order)
+        tracker_flairs = list(FlairType.objects.filter(flair_type__exact="list"))
+        tracker_flairs.sort(key=sort_flairtype_by_order)
 
         return render(request, 'flair/setflair.html', {
             'username': username,
+            'general_flairs': general_flairs,
             'allowed_flairs': awarded_flairs,
             'current_flair_text': stripped_flair,
             'current_flair_url': stripped_flair_url,
             'current_emoji_flair_list': current_emoji_flair_list,
             'tracker_name': tracker_name,
             'tracker_user_account_name': tracker_user_account_name,
-            'default_flairs': default_flairs,
+            'tracker_flairs': tracker_flairs,
         })
     else:
         return HttpResponse('No reddit account is attached to this login. (Shadowbanned or Site-Administrator)')
@@ -126,6 +136,7 @@ def submit(request):
     awarded_flairs = remove_duplicate_awarded_flairs(awarded_flairs)
     awarded_flairs.sort(key=sort_awarded_flairs_by_order)
 
+    flair_general_emoji_to_set = ""
     flair_award_emoji_to_set = ""
     flair_tracker_emoji_to_set = ""
     flair_tracker_text_to_set = ""
@@ -142,19 +153,39 @@ def submit(request):
                 flaircap -= 1
                 flair_award_emoji_to_set = flair_award_emoji_to_set + get_award_flair_emoji_text(flair_award)
 
-    # Sort out 'default' flair section
-    if "defaultflair" in request.POST:
-        if request.POST["defaultflair"] == "notracker":
+    # General/custom flairs
+    custom_flairs_available = [awarded.flair_id for awarded in awarded_flairs if awarded.flair_id.flair_type == "custom"]
+    general_flairs = list(FlairType.objects.filter(flair_type="general"))
+    requested_flair_id = None
+    if "generalflair" in request.POST:
+        try:
+            requested_flair_id = int(request.POST["generalflair"])
+        except (ValueError, TypeError):
+            pass
+    if requested_flair_id:
+        for flair_type in custom_flairs_available:
+            if flair_type.id == requested_flair_id:
+                flair_general_emoji_to_set = flair_type.reddit_flair_emoji
+                break
+        else:  # Didn't find their selection in custom flair so check general flairs next.
+            for flair_type in general_flairs:
+                if flair_type.id == requested_flair_id:
+                    flair_general_emoji_to_set = flair_type.reddit_flair_emoji
+                    break
+
+    # Sort out 'list' flair section
+    if "trackerflair" in request.POST:
+        if request.POST["trackerflair"] == "notracker":
             # print("notracker")
             pass
         elif "trackerAccountName" in request.POST:
             # print(request.POST) # Debugging
 
-            default_flairs = list(FlairType.objects.filter(flair_type__iexact="default"))
-            for flairtype in default_flairs:
+            tracker_flairs = list(FlairType.objects.filter(flair_type__iexact="list"))
+            for flairtype in tracker_flairs:
                 # print(flairtype.display_name)
                 # Look for through database flairs to find what they have
-                if request.POST["defaultflair"] == flairtype.display_name:
+                if request.POST["trackerflair"] == flairtype.display_name:
                     #  Set both tracker icon and entered tracker name/id
                     flair_tracker_emoji_to_set = flairtype.reddit_flair_emoji
                     flair_tracker_text_to_set = flairtype.reddit_flair_text
@@ -163,7 +194,7 @@ def submit(request):
                     break
 
     # Build the flair text that will then be set
-    final_flair_to_set = flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set,
+    final_flair_to_set = flair_length_builder(flair_general_emoji_to_set, flair_award_emoji_to_set, flair_tracker_emoji_to_set,
                                               flair_tracker_text_to_set, flair_tracker_user_account)
 
     # Finally set the flair on the subreddit, use the template way if one is set

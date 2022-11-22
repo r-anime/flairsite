@@ -49,6 +49,6 @@ You can make apps on Reddit [here](https://www.reddit.com/prefs/apps) for a logg
   * [Setup flair templates on your subreddit](https://mods.reddithelp.com/hc/en-us/articles/360010541651-User-Flair)
   * Additional flair images can be added to the website in `flair/static/flairs`.
   * Use the admin page to setup a `Flair type` you will use your setup emoji and template from the above two steps. [Example](https://i.imgur.com/XAvboSA.png)
-  * Set up a `Flair type` with an `award` `Flair Type` and then award that flair in `Flairs awardeds`, note the reddit username is case-sensitive.
+  * Set up a `Flair type` with an `achievement` `Flair Type` and then award that flair in `Flairs awardeds`, note the reddit username is case-sensitive.
 * Go to the flair site and login as a reddit user, test the set (`.../flair/set`) and wiki pages (`.../wiki`)
 * You should now be able to see the loaded flairs and set them.

@@ -11,10 +11,10 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="section-title-grey">Default Anime Tracking Flairs</div>
+                <div class="section-title-grey">Anime Tracking Flairs</div>
                 <ul>
                     {% for flairtype in wiki_flairs %}
-                    {% if flairtype.flair_type == "default" %}
+                    {% if flairtype.flair_type == "list" %}
                     <li class="list-card">
                         <div class="list-card-wiki-title-image">
                             <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
@@ -35,13 +35,33 @@
                 <div class="section-title-grey">Flair Rewards</div>
                 <ul>
                     {% for flairtype in wiki_flairs %}
-                    {% if flairtype.flair_type == "award" %}
+                    {% if flairtype.flair_type == "achievement" %}
                     <li class="list-card">
                         <div class="list-card-wiki-title-image">
                             <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
                             <img src="{{flairtype.static_image}}">
                         </div>                            
                         <div class="wiki-item-text">{{flairtype.wiki_text|safe}}</div>                        
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="section-title-grey">General Flairs</div>
+                <ul>
+                    {% for flairtype in wiki_flairs %}
+                    {% if flairtype.flair_type == "general" %}
+                    <li class="list-card">
+                        <div class="list-card-wiki-title-image">
+                            <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
+                            <img src="{{flairtype.static_image}}">
+                        </div>
+
+                        <div class="wiki-item-text ">{{flairtype.wiki_text|safe}}</div>
+
                     </li>
                     {% endif %}
                     {% endfor %}
