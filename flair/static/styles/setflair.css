@@ -40,11 +40,16 @@
 .list-card label{
   color: #474747;
   margin-left: 8px;
+  margin-right: 8px;
   margin-bottom: 0px;
 }
 
+.list-card {
+  margin-right: 8px;
+}
+
 .list-card-general {
-  width: 300px;
+  min-width: 300px;
 }
 
 .type-custom-label {
@@ -52,9 +57,6 @@
 }
 
 .flair-list{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   overflow: auto;
   overflow-x: hidden;
   max-height: 50vh;
