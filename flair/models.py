@@ -10,7 +10,7 @@ User = get_user_model()
 class FlairType(models.Model):
     id = models.BigAutoField(primary_key=True)
     display_name = models.CharField("Text displayed on django server for flair", max_length=64)
-    display_image = models.ImageField("Image shown on server for flair", upload_to="flair/static/flairs/", blank=True)
+    display_image = models.ImageField("Image shown on server for flair", upload_to="flair_images", blank=True)
     reddit_flair_emoji = models.CharField("Emoji that will be added if selected", max_length=64)
     reddit_flair_text = models.CharField("Text that will be added if selected", max_length=64, blank=True)
     reddit_flair_template_id = models.CharField("Reddit's Template ID to set if any", max_length=36, blank=True)

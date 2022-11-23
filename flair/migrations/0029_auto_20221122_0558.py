@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='flairtype',
             name='display_image',
-            field=models.ImageField(blank=True, upload_to='flair/static/flairs/', verbose_name='Image shown on server for flair'),
+            field=models.ImageField(blank=True, upload_to='flair_images', verbose_name='Image shown on server for flair'),
         ),
         migrations.AlterField(
             model_name='flairsawarded',

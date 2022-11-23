@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.shortcuts import redirect
 from django.urls import path
 
@@ -15,4 +17,4 @@ urlpatterns = [
     path('set', views.set_flair_url, name='set_flair_url'),
     path('submit', views.submit, name='submit'),
     path('favicon.ico', favicon_redirect),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
