@@ -44,18 +44,29 @@ def parse_flair_types(flair_string):
     # TODO: Override now creates a problem here; we can't reverse back to display a flair.
     # Needs to be placed in database to exist for display back.
 
-    awarded_flairs = []
+    selected_flairs = []
 
-    if flair_string is None:
-        return awarded_flairs  # If empty or None return nothing
+    if not flair_string:
+        return selected_flairs  # If empty or None return nothing
 
-    database = FlairType.objects.all()
+    flair_types = FlairType.objects.all()
 
-    for flair_type in database:
-        if flair_type.reddit_flair_emoji in flair_string:
-            awarded_flairs.append(flair_type)
+    # Less efficient this way but this will preserve the actual order of flairs as currently set.
+    selected_emoji_list = get_all_colon_emoji(flair_string)
+    for emoji_string in selected_emoji_list:
+        for flair_type in flair_types:
+            # Two-part check: is the substring for this emoji in the flair, and
+            # is the flair's *entire* emoji list in the full flair string?
+            # Will skip identifying a flair if only part of its emoji are set here, but this accounts for cases
+            # where there are "partial" and "full" versions of flairs that share an emoji.
+            # The third part avoids duplicates as one flair may have multiple emoji associated with it.
+            if emoji_string in flair_type.reddit_flair_emoji and \
+                    flair_type.reddit_flair_emoji in flair_string and \
+                    flair_type not in selected_flairs:
+                selected_flairs.append(flair_type)
+                break
 
-    return awarded_flairs
+    return selected_flairs
 
 
 def tracker_type(flair_string):
