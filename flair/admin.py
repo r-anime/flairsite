@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db.models import Count
+from django.utils.html import format_html
 
 from .models import FlairType, FlairsAwarded, FlairAssigned, ActionLogging
 
@@ -19,6 +20,7 @@ class FlairsAssignedAdmin(admin.ModelAdmin):
 class FlairTypeAdmin(admin.ModelAdmin):
     list_display = (
         'display_name',
+        'image_tag',
         'flair_type',
         'assigned_count',
         'note',
@@ -28,6 +30,13 @@ class FlairTypeAdmin(admin.ModelAdmin):
         'reddit_flair_text',
         'reddit_flair_template_id',
         )
+
+    def image_tag(self, obj):
+        if obj.static_image:
+            return format_html('<img src="{0}" style="height:16px;" />'.format(obj.static_image))
+        elif not obj.display_image:
+            return
+        return format_html('<img src="{0}" style="height:16px;" />'.format(obj.display_image.url))
 
     def assigned_count(self, obj):
         return obj.assigned_count
