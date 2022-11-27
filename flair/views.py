@@ -62,6 +62,7 @@ def set_flair_url(request):
 
         current_flair = get_flair(username).get("flair_text")
         current_emoji_flair_list = parse_flair_types(current_flair)
+        set_current_assigned_flairs(username, current_emoji_flair_list)
 
         stripped_flair = colon_emoji_strip(current_flair)
         stripped_flair_url = make_url_of_flair_text(stripped_flair)
@@ -196,6 +197,9 @@ def submit(request):
     # Build the flair text that will then be set
     final_flair_to_set = flair_length_builder(flair_general_emoji_to_set, flair_award_emoji_to_set, flair_tracker_emoji_to_set,
                                               flair_tracker_text_to_set, flair_tracker_user_account)
+
+    final_flair_list = parse_flair_types(final_flair_to_set)
+    set_current_assigned_flairs(username, final_flair_list)
 
     # Finally set the flair on the subreddit, use the template way if one is set
     if flair_template_to_set == "":

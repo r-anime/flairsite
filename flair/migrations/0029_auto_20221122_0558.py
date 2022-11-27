@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
+import django.utils.timezone
 
 
 class Migration(migrations.Migration):
@@ -11,10 +12,29 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='FlairAssigned',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('reddit_username', models.CharField(max_length=22, verbose_name='Reddit Username')),
+                ('date_added', models.DateTimeField(blank=True, default=django.utils.timezone.now)),
+                ('flair_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flair.flairtype')),
+            ],
+        ),
+        migrations.AlterField(
+            model_name='flairtype',
+            name='display_name',
+            field=models.CharField(max_length=64, verbose_name='Display name'),
+        ),
+        migrations.AlterField(
+            model_name='flairtype',
+            name='order',
+            field=models.IntegerField(default=1),
+        ),
         migrations.AddField(
             model_name='flairtype',
             name='display_image',
-            field=models.ImageField(upload_to='flair_images', verbose_name='Image shown on server for flair'),
+            field=models.ImageField(upload_to='flair_images', verbose_name='Display image'),
         ),
         migrations.AlterField(
             model_name='flairsawarded',

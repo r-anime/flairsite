@@ -9,15 +9,15 @@ User = get_user_model()
 
 class FlairType(models.Model):
     id = models.BigAutoField(primary_key=True)
-    display_name = models.CharField("Text displayed on django server for flair", max_length=64)
-    display_image = models.ImageField("Image shown on server for flair", upload_to="flair_images")
+    display_name = models.CharField("Display name", max_length=64)
+    display_image = models.ImageField("Display image", upload_to="flair_images")
     reddit_flair_emoji = models.CharField("Emoji that will be added if selected", max_length=64)
     reddit_flair_text = models.CharField("Text that will be added if selected", max_length=64, blank=True)
     reddit_flair_template_id = models.CharField("Reddit's Template ID to set if any", max_length=36, blank=True)
     FLAIR_TYPE_CHOICES = [('general', 'General'), ('custom', 'Custom'), ('list', 'List'), ('achievement', 'Achievement'), ('temporary', 'Temporary'), ('override', 'Override')]
     flair_type = models.CharField("Flairs Type", default="default", choices=FLAIR_TYPE_CHOICES, max_length=255)
     note = models.CharField("An optional note about this flair", default="", max_length=255, blank=True)
-    order = models.IntegerField()  # used to order emojis/flairs when multiple added
+    order = models.IntegerField(default=1)  # used to order emojis/flairs when multiple added
     wiki_display = models.BooleanField(default=False)
     wiki_title = models.CharField("Title of the flair displayed on the wiki", default="", max_length=255, blank=True)
     wiki_text = models.CharField("Information displayed on the flair wiki page", default="", max_length=65536, blank=True)
@@ -37,6 +37,16 @@ class FlairsAwarded(models.Model):
 
     def __str__(self):
         return "{} : {}".format(self.display_name, self.flair_id)
+
+
+class FlairAssigned(models.Model):
+    reddit_username = models.CharField("Reddit Username", max_length=22)
+    flair_id = models.ForeignKey(FlairType, null=True, on_delete=models.SET_NULL)
+    date_added = models.DateTimeField(default=timezone.now, blank=True)
+
+    def __str__(self):
+        return "{}: {}".format(self.reddit_username, self.flair_id)
+
 
 
 class ActionLogging(models.Model):

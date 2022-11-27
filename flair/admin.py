@@ -1,6 +1,7 @@
 from django.contrib import admin
+from django.db.models import Count
 
-from .models import FlairType, FlairsAwarded, ActionLogging
+from .models import FlairType, FlairsAwarded, FlairAssigned, ActionLogging
 
 
 class FlairsAwardedAdmin(admin.ModelAdmin):
@@ -9,22 +10,34 @@ class FlairsAwardedAdmin(admin.ModelAdmin):
     search_fields = ['display_name']
 
 
+class FlairsAssignedAdmin(admin.ModelAdmin):
+    list_display = ('reddit_username', 'flair_id', 'date_added')
+    list_filter = ['date_added']
+    search_fields = ['reddit_username']
+
+
 class FlairTypeAdmin(admin.ModelAdmin):
     list_display = (
         'display_name',
-        'id',
-        'display_image',
+        'flair_type',
+        'assigned_count',
+        'note',
+        'wiki_display',
         'order',
         'reddit_flair_emoji',
         'reddit_flair_text',
         'reddit_flair_template_id',
-        'flair_type',
-        'note',
-        'wiki_display',
-        'wiki_title',
-        'wiki_text',
-        'static_image'
         )
+
+    def assigned_count(self, obj):
+        return obj.assigned_count
+
+    assigned_count.admin_order_field = 'assigned_count'
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.annotate(assigned_count=Count("flairassigned__flair_id"))
+        return queryset
 
 
 class ActionLoggingAdmin(admin.ModelAdmin):
@@ -42,4 +55,5 @@ class ActionLoggingAdmin(admin.ModelAdmin):
 
 admin.site.register(FlairType, FlairTypeAdmin)
 admin.site.register(FlairsAwarded, FlairsAwardedAdmin)
+admin.site.register(FlairAssigned, FlairsAssignedAdmin)
 admin.site.register(ActionLogging, ActionLoggingAdmin)

@@ -1,6 +1,6 @@
 import re
 
-from flair.models import FlairType
+from flair.models import FlairType, FlairAssigned
 
 """A set of functions for turning strings to recognised flair emoji"""
 
@@ -318,3 +318,17 @@ def get_award_flair_emoji_text(flair_award):
         award_flair_text += 'x' + str(flair_award.awarded_count)
 
     return award_flair_text
+
+
+def set_current_assigned_flairs(username, flair_list):
+    """Update the current flairs set for the user in the database."""
+    # If no change, don't need to do anything.
+    current_assigned = FlairAssigned.objects.filter(reddit_username=username)
+    current_flairs = [assigned.flair_id for assigned in current_assigned]
+    if set(current_flairs) == set(flair_list):
+        return
+
+    # Otherwise delete current assigned and set the new ones.
+    current_assigned.delete()
+    for flair in flair_list:
+        FlairAssigned.objects.create(reddit_username=username, flair_id=flair)
