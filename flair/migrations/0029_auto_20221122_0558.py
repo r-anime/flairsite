@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='flairtype',
             name='display_image',
-            field=models.ImageField(blank=True, upload_to='flair_images', verbose_name='Image shown on server for flair'),
+            field=models.ImageField(upload_to='flair_images', verbose_name='Image shown on server for flair'),
         ),
         migrations.AlterField(
             model_name='flairsawarded',
@@ -30,5 +30,10 @@ class Migration(migrations.Migration):
             model_name='flairtype',
             name='reddit_flair_emoji',
             field=models.CharField(max_length=64, verbose_name='Emoji that will be added if selected'),
+        ),
+        migrations.AlterField(
+            model_name='flairtype',
+            name='wiki_display',
+            field=models.BooleanField(default=False),
         ),
     ]
