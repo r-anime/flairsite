@@ -1,3 +1,5 @@
+import random
+
 from allauth.account.views import LoginView, logout
 from django.contrib import auth
 from django.contrib.auth import logout
@@ -75,6 +77,8 @@ def set_flair_url(request):
         none_type.display_name = "None"
         general_flairs = list(FlairType.objects.filter(flair_type__exact="general"))
         custom_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username).filter(flair_id__flair_type="custom"))
+        # Temporary: pick a present flair if they exist.
+        _pick_present_flair(username, custom_flairs)
         general_flairs = [none_type] + [custom_flair.flair_id for custom_flair in custom_flairs] + general_flairs
         find_already_set_general_flairs(general_flairs, current_emoji_flair_list)  # Adds 'checked' status to objects
 
@@ -103,6 +107,21 @@ def set_flair_url(request):
         })
     else:
         return HttpResponse('No reddit account is attached to this login. (Shadowbanned or Site-Administrator)')
+
+
+def _pick_present_flair(username, custom_flairs):
+    present_flair_name = "??????"
+    # Don't do anything if they already have one assigned.
+    for flair_type in custom_flairs:
+        if flair_type.flair_id.display_name == present_flair_name:
+            return
+    present_flairs = list(FlairType.objects.filter(flair_type__exact="custom").filter(display_name__exact=present_flair_name))
+    if not present_flairs:
+        return
+    # Select one at random, award it, and add it to their custom flair list.
+    selected_flair = random.choice(present_flairs)
+    awarded = FlairsAwarded.objects.create(flair_id=selected_flair, display_name=username)
+    custom_flairs.append(awarded)
 
 
 setup_status = False
