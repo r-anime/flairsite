@@ -8,13 +8,13 @@ from .models import FlairType, FlairsAwarded, FlairAssigned, ActionLogging
 class FlairsAwardedAdmin(admin.ModelAdmin):
     list_display = ('display_name', 'flair_id', 'date_added', 'note', 'override', 'override_flair')
     list_filter = ['date_added']
-    search_fields = ['display_name']
+    search_fields = ['display_name', 'flair_id__display_name']
 
 
 class FlairsAssignedAdmin(admin.ModelAdmin):
     list_display = ('reddit_username', 'flair_id', 'date_added')
     list_filter = ['date_added']
-    search_fields = ['reddit_username']
+    search_fields = ['reddit_username', 'flair_id__display_name']
 
 
 class FlairTypeAdmin(admin.ModelAdmin):
