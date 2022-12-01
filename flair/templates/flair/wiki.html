@@ -56,30 +56,6 @@
                 </ul>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <div class="section-title-grey">General Flairs</div>
-                <ul>
-                    {% for flairtype in wiki_flairs %}
-                    {% if flairtype.flair_type == "general" %}
-                    <li class="list-card">
-                        <div class="list-card-wiki-title-image">
-                            <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
-                            {% if flairtype.display_image %}
-                            <img src="{{flairtype.display_image.url}}" alt="{{flairtype.display_name}}">
-                            {% else %}
-                            <img src="{{flairtype.static_image}}" alt="{{flairtype.display_name}}">
-                            {% endif%}
-                        </div>
-
-                        <div class="wiki-item-text ">{{flairtype.wiki_text|safe}}</div>
-
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
     </div>
     <div id="info-box">
         <h5>What are flairs?</h5> 
