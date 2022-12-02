@@ -13,6 +13,7 @@
 <form action="/submit" method="post">
     {% csrf_token %}
     <div class="container custom-container">
+        {% if general_flairs|length > 1 %}
         <div class="row">
             <div class="col-xl">
                 <div class="section-title-grey">Select <span class="section-title-emphasis">one</span> General flair:</div>
@@ -39,6 +40,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         <div class="row">
             <div class="col-md">
                 <div class="section-title-grey">Select an <span class="section-title-emphasis">Anime Tracking</span> flair:</div>
