@@ -1,6 +1,9 @@
-from django.contrib import admin
+from django import forms
+from django.contrib import admin, messages
+from django.contrib.admin.helpers import ActionForm
 from django.db.models import Count
 from django.utils.html import format_html
+
 
 from .models import FlairType, FlairsAwarded, FlairAssigned, ActionLogging
 
@@ -17,7 +20,22 @@ class FlairsAssignedAdmin(admin.ModelAdmin):
     search_fields = ['reddit_username', 'flair_id__display_name']
 
 
+class UpdateFlairTypeActionForm(ActionForm):
+    flair_type = forms.ChoiceField(choices=FlairType.FLAIR_TYPE_CHOICES, required=False)
+
+
+def update_flair_type(modeladmin, request, queryset):
+    flair_type = request.POST['flair_type']
+    queryset.update(flair_type=flair_type)
+    modeladmin.message_user(request, f"Successfully changed flair type for {queryset.count()} rows", messages.SUCCESS)
+
+
+update_flair_type.short_description = "Update flair type of selected rows"
+
+
 class FlairTypeAdmin(admin.ModelAdmin):
+    action_form = UpdateFlairTypeActionForm
+    actions = [update_flair_type]
     list_display = (
         'display_name',
         'image_tag',
