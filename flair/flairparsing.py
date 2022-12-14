@@ -1,6 +1,6 @@
 import re
 
-from flair.models import FlairType
+from flair.models import FlairType, FlairAssigned
 
 """A set of functions for turning strings to recognised flair emoji"""
 
@@ -38,26 +38,35 @@ def get_all_colon_emoji(string):
     return reg_exp_obj.findall(string)
 
 
-def users_current_awarded_flair_icons(flair_string):
+def parse_flair_types(flair_string):
     """Builds a list of FlairType flair's the user is currently using. No validation on a user, just shows what they have already."""
 
     # TODO: Override now creates a problem here; we can't reverse back to display a flair.
     # Needs to be placed in database to exist for display back.
 
-    awarded_flairs = []
+    selected_flairs = []
 
-    if flair_string is None:
-        return awarded_flairs  # If empty or None return nothing
+    if not flair_string:
+        return selected_flairs  # If empty or None return nothing
 
-    ls = get_all_colon_emoji(flair_string)
-    database = FlairType.objects.all()
+    flair_types = FlairType.objects.all()
 
-    for emoji in ls:
-        for flair_type in database:
-            if emoji == flair_type.reddit_flair_emoji:
-                awarded_flairs.append(flair_type)
+    # Less efficient this way but this will preserve the actual order of flairs as currently set.
+    selected_emoji_list = get_all_colon_emoji(flair_string)
+    for emoji_string in selected_emoji_list:
+        for flair_type in flair_types:
+            # Two-part check: is the substring for this emoji in the flair, and
+            # is the flair's *entire* emoji list in the full flair string?
+            # Will skip identifying a flair if only part of its emoji are set here, but this accounts for cases
+            # where there are "partial" and "full" versions of flairs that share an emoji.
+            # The third part avoids duplicates as one flair may have multiple emoji associated with it.
+            if emoji_string in flair_type.reddit_flair_emoji and \
+                    flair_type.reddit_flair_emoji in flair_string and \
+                    flair_type not in selected_flairs:
+                selected_flairs.append(flair_type)
+                break
 
-    return awarded_flairs
+    return selected_flairs
 
 
 def tracker_type(flair_string):
@@ -73,7 +82,7 @@ def tracker_type(flair_string):
         for emoji in ls:
             for flair_type in database:
                 if emoji == flair_type.reddit_flair_emoji:
-                    if flair_type.flair_type == 'default':
+                    if flair_type.flair_type == 'list':
                         return flair_type.display_name
 
     # This covers for when the account doesn't have a tracker emoji (ie: no space or if we allow as a policy) or is a legacy flair and is matching on URL's instead
@@ -95,7 +104,7 @@ def tracker_type(flair_string):
     return "notracker"
 
 
-def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, flair_tracker_text_to_set,
+def flair_length_builder(flair_general_emoji_to_set, flair_award_emoji_to_set, flair_tracker_emoji_to_set, flair_tracker_text_to_set,
                          flair_tracker_user_account):
     """Flair is limited to 64 characters, this function runs filters on the entered text and tries and cuts down longer flairs to fit"""
     """It is assumed the longest tracker_text_to_set will be 51 characters. Eg:"""
@@ -111,24 +120,29 @@ def flair_length_builder(flair_award_emoji_to_set, flair_tracker_emoji_to_set, f
         full_length_string = flair_award_emoji_to_set
         return full_length_string
 
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         # Great, no problems return it
         return full_length_string
 
     # Remove the "https://" and see if that fits
     flair_tracker_text_to_set = flair_tracker_text_to_set.replace("https://", "")
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set + flair_tracker_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         return full_length_string
 
     # Cut the tracker emoji as well and see if that fits
-    full_length_string = flair_award_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set + flair_tracker_text_to_set + validated_tracker_user_account
     if len(full_length_string) <= 64:
         return full_length_string
 
     # Just have the tracker site emoji and the users username
-    full_length_string = flair_award_emoji_to_set + flair_tracker_emoji_to_set + validated_tracker_user_account
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set + flair_tracker_emoji_to_set + validated_tracker_user_account
+    if len(full_length_string) <= 64:
+        return full_length_string
+
+    # Cut out the tracker entirely if it's still too long
+    full_length_string = flair_general_emoji_to_set + flair_award_emoji_to_set
     if len(full_length_string) <= 64:
         return full_length_string
 
@@ -193,9 +207,21 @@ def tracker_account_name_validation(string):
     return string
 
 
-def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
+def find_already_set_general_flairs(general_flairs, current_selected_flair_list):
+    """Edits the general_flairs list to set if a flair is 'checked' and in the users flair already."""
+
+    for flair in general_flairs:
+
+        flair.checked = False
+        for currently_selected_flair in current_selected_flair_list:
+            # Normal Check
+            if flair == currently_selected_flair:
+                flair.checked = True
+                break
+
+
+def find_already_set_award_flairs(all_awarded_flairs, current_selected_flair_list):
     """Edits the all_awarded_flairs list to set if a flair is 'checked' and in the users flair already."""
-    ls = []
 
     for awarded_flair in all_awarded_flairs:
 
@@ -213,9 +239,6 @@ def find_already_set_flairs(all_awarded_flairs, current_selected_flair_list):
             awarded_flair.flair_id.checked = True
         else:
             awarded_flair.flair_id.checked = False
-        ls.append(awarded_flair)
-
-    return ls
 
 
 def check_awarded_flairs_overrides(all_awarded_flairs):
@@ -295,3 +318,17 @@ def get_award_flair_emoji_text(flair_award):
         award_flair_text += 'x' + str(flair_award.awarded_count)
 
     return award_flair_text
+
+
+def set_current_assigned_flairs(username, flair_list):
+    """Update the current flairs set for the user in the database."""
+    # If no change, don't need to do anything.
+    current_assigned = FlairAssigned.objects.filter(reddit_username=username)
+    current_flairs = [assigned.flair_id for assigned in current_assigned]
+    if set(current_flairs) == set(flair_list):
+        return
+
+    # Otherwise delete current assigned and set the new ones.
+    current_assigned.delete()
+    for flair in flair_list:
+        FlairAssigned.objects.create(reddit_username=username, flair_id=flair)

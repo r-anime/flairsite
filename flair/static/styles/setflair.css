@@ -40,13 +40,23 @@
 .list-card label{
   color: #474747;
   margin-left: 8px;
+  margin-right: 8px;
   margin-bottom: 0px;
 }
 
+.list-card {
+  margin-right: 8px;
+}
+
+.list-card-general {
+  min-width: 300px;
+}
+
+.type-custom-label {
+  font-weight: bold;
+}
+
 .flair-list{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   overflow: auto;
   overflow-x: hidden;
   max-height: 50vh;
@@ -68,6 +78,10 @@
   margin-top: 8px;
   margin-bottom: 16px;
 }
+.track-box img {
+  height: 24px;
+}
+
 #notrackerbox {
   background-color: #dadada ;
 }
