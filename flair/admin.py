@@ -36,6 +36,7 @@ update_flair_type.short_description = "Update flair type of selected rows"
 class FlairTypeAdmin(admin.ModelAdmin):
     action_form = UpdateFlairTypeActionForm
     actions = [update_flair_type]
+    search_fields = ['display_name', 'flair_type', 'note']
     list_display = (
         'display_name',
         'image_tag',
