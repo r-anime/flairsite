@@ -21,7 +21,6 @@ class FlairType(models.Model):
     wiki_display = models.BooleanField(default=False)
     wiki_title = models.CharField("Title of the flair displayed on the wiki", default="", max_length=255, blank=True)
     wiki_text = models.CharField("Information displayed on the flair wiki page", default="", max_length=65536, blank=True)
-    static_image = models.CharField("Server image path. Used by wiki page", default="", max_length=255, blank=True)
 
     def __str__(self):
         return self.display_name
@@ -46,7 +45,6 @@ class FlairAssigned(models.Model):
 
     def __str__(self):
         return "{}: {}".format(self.reddit_username, self.flair_id)
-
 
 
 class ActionLogging(models.Model):

@@ -5,16 +5,16 @@ from .redditflair import *
 
 def setup_db():
     q = FlairType(id=1, display_name="Cake", reddit_flair_emoji=":cake:", order=1,
-                  static_image='/static/flairs/bot.png')
+                  display_image='/static/flairs/bot.png')
     q.save()
     q = FlairType(id=2, display_name="Upvote", reddit_flair_emoji=":upvote:", order=2,
-                  static_image='/static/flairs/upvote.png')
+                  display_image='/static/flairs/upvote.png')
     q.save()
     q = FlairType(id=3, display_name="Star", reddit_flair_emoji=":star:", order=3,
-                  static_image='/static/flairs/star.png')
+                  display_image='/static/flairs/star.png')
     q.save()
     q = FlairType(id=7, display_name="Anilist", reddit_flair_emoji=":ANI:", order=96,
-                  static_image='/static/flairs/Anilist.png')
+                  display_image='/static/flairs/Anilist.png')
     q.save()
 
     f = FlairsAwarded(flair_id=FlairType.objects.get(id=1), display_name="spez")
