@@ -248,7 +248,7 @@ def check_awarded_flairs_overrides(all_awarded_flairs):
     for awarded_flair in all_awarded_flairs:
         if awarded_flair.override:
             awarded_flair.flair_id.reddit_flair_emoji = awarded_flair.override_flair.reddit_flair_emoji
-            awarded_flair.flair_id.static_image = awarded_flair.override_flair.static_image
+            awarded_flair.flair_id.display_image = awarded_flair.override_flair.display_image
 
     temp_awarded_flairs_ls = []
     temp_awarded_flairs_ls.extend(all_awarded_flairs)
@@ -262,7 +262,7 @@ def check_awarded_flairs_overrides(all_awarded_flairs):
                     real_flair.override = True
                     real_flair.override_flair = awarded_flair.override_flair
                     real_flair.flair_id.reddit_flair_emoji = awarded_flair.flair_id.reddit_flair_emoji
-                    real_flair.flair_id.static_image = awarded_flair.flair_id.static_image
+                    real_flair.flair_id.display_image = awarded_flair.flair_id.display_image
                     # TODO: Does not handle when user has been awarded twice, with two override flairs
 
     return all_awarded_flairs
@@ -278,7 +278,7 @@ def apply_awarded_flairs_overrides(all_awarded_flairs, current_selected_flair_li
                     # Fix up award_counts when overriden:
                     currently_selected_flair.awarded_count = awarded_flair.awarded_count
                     currently_selected_flair.reddit_flair_emoji = awarded_flair.override_flair.reddit_flair_emoji
-                    currently_selected_flair.static_image = awarded_flair.override_flair.static_image
+                    currently_selected_flair.display_image = awarded_flair.override_flair.display_image
             if awarded_flair.flair_id == currently_selected_flair:
                 # Fix up award_counts when not overriden:
                 currently_selected_flair.awarded_count = awarded_flair.awarded_count

@@ -20,11 +20,9 @@
                             <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
                             {% if flairtype.display_image %}
                             <img src="{{flairtype.display_image.url}}" alt="{{flairtype.display_name}}">
-                            {% else %}
-                            <img src="{{flairtype.static_image}}" alt="{{flairtype.display_name}}">
                             {% endif%}
                         </div>
-                            
+
                         <div class="wiki-item-text ">{{flairtype.wiki_text|safe}}</div>
                         
                     </li>
@@ -45,8 +43,6 @@
                             <div class="wiki-item-title">{{flairtype.wiki_title|safe}}</div>
                             {% if flairtype.display_image %}
                             <img src="{{flairtype.display_image.url}}" alt="{{flairtype.display_name}}">
-                            {% else %}
-                            <img src="{{flairtype.static_image}}" alt="{{flairtype.display_name}}">
                             {% endif%}
                         </div>                            
                         <div class="wiki-item-text">{{flairtype.wiki_text|safe}}</div>                        

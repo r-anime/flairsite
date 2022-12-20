@@ -34,7 +34,9 @@
                         {% else %}
                             <label for="flairChoice{{flair_general.id}}">{{flair_general.display_name}}</label>
                         {% endif %}
-                        {%if flair_general.id != 0 %}<img src="{{flair_general.display_image.url}}" alt="{{flair_general.display_name}}">{% endif %}
+                        {%if flair_general.display_image %}
+                        <img src="{{flair_general.display_image.url}}" alt="{{flair_general.display_name}}">
+                        {% endif %}
                     </div>
                 {% endfor %}
                 </div>
@@ -64,8 +66,6 @@
                             <label class="form-check-label" for="{{flairtype.display_name}}">{{flairtype.display_name}}</label>
                             {% if flairtype.display_image %}
                             <img src="{{flairtype.display_image.url}}" alt="{{flairtype.display_name}}">
-                            {% else %}
-                            <img src="{{flairtype.static_image}}" alt="{{flairtype.display_name}}">
                             {% endif %}
                         </div>
                         </label>
@@ -98,10 +98,8 @@
                             <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}}</label>
                             {% endif %}
 
-                            {% if flair_awarded.flair_id.display_image.display_image %}
+                            {% if flair_awarded.flair_id.display_image %}
                             <img src="{{flair_awarded.flair_id.display_image.url}}" alt="{{flair_awarded.flair_id.display_name}}">
-                            {% else %}
-                            <img src="{{flair_awarded.flair_id.static_image}}" alt="{{flair_awarded.flair_id.display_name}}">
                             {% endif %}
                         </div>
                         </label>
@@ -140,8 +138,6 @@
                         {% for flair_image in current_emoji_flair_list %}
                             {% if flair_image.display_image %}
                             <img class="d-inline-block align-top" src="{{flair_image.display_image.url}}" alt="{{flair_image.display_name}}">
-                            {% else %}
-                            <img class="d-inline-block align-top" src="{{flair_image.static_image}}" alt="{{flair_image.display_name}}">
                             {% endif %}
                             {% if flair_image.awarded_count > 1 %}
                                 x{{flair_image.awarded_count}}

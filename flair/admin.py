@@ -50,9 +50,7 @@ class FlairTypeAdmin(admin.ModelAdmin):
         )
 
     def image_tag(self, obj):
-        if obj.static_image:
-            return format_html('<img src="{0}" style="height:16px;" />'.format(obj.static_image))
-        elif not obj.display_image:
+        if not obj.display_image:
             return
         return format_html('<img src="{0}" style="height:16px;" />'.format(obj.display_image.url))
 
