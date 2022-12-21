@@ -27,7 +27,7 @@ class FlairType(models.Model):
 
 
 class FlairsAwarded(models.Model):
-    flair_id = models.ForeignKey(FlairType, limit_choices_to=Q(flair_type='achievement') | Q(flair_type='custom') | Q(flair_type='tiered-award'), null=True, on_delete=models.SET_NULL)  # Links to what flair, or null if somehow deleted
+    flair_id = models.ForeignKey(FlairType, limit_choices_to=Q(flair_type='achievement') | Q(flair_type='custom') | Q(flair_type='temporary'), null=True, on_delete=models.SET_NULL)  # Links to what flair, or null if somehow deleted
     display_name = models.CharField("A reddit username", max_length=20)  # Reddit names can be max 20 characters
     date_added = models.DateTimeField(default=timezone.now, blank=True)
     note = models.CharField("An optional note on why this was awarded", default="", max_length=255, blank=True)
