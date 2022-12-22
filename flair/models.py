@@ -43,6 +43,9 @@ class FlairAssigned(models.Model):
     flair_id = models.ForeignKey(FlairType, null=True, on_delete=models.SET_NULL)
     date_added = models.DateTimeField(default=timezone.now, blank=True)
 
+    class Meta:
+        verbose_name = "Currently set flair"
+
     def __str__(self):
         return "{}: {}".format(self.reddit_username, self.flair_id)
 

@@ -40,7 +40,7 @@ class FlairTypeAdmin(admin.ModelAdmin):
         'display_name',
         'image_tag',
         'flair_type',
-        'assigned_count',
+        'currently_set_count',
         'note',
         'wiki_display',
         'order',
@@ -54,14 +54,14 @@ class FlairTypeAdmin(admin.ModelAdmin):
             return
         return format_html('<img src="{0}" style="height:16px;" />'.format(obj.display_image.url))
 
-    def assigned_count(self, obj):
-        return obj.assigned_count
+    def currently_set_count(self, obj):
+        return obj.currently_set_count
 
-    assigned_count.admin_order_field = 'assigned_count'
+    currently_set_count.admin_order_field = 'currently_set_count'
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
-        queryset = queryset.annotate(assigned_count=Count("flairassigned__flair_id"))
+        queryset = queryset.annotate(currently_set_count=Count("flairassigned__flair_id"))
         return queryset
 
 
