@@ -78,7 +78,7 @@ def set_flair_url(request):
         general_flairs = list(FlairType.objects.filter(flair_type__exact="general"))
         custom_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username).filter(flair_id__flair_type="custom"))
         # Temporary: pick a present flair if they exist.
-        _pick_present_flair(username, custom_flairs)
+        _pick_present_flair(username, custom_flairs, current_emoji_flair_list)
         general_flairs = [none_type] + [custom_flair.flair_id for custom_flair in custom_flairs] + general_flairs
         find_already_set_general_flairs(general_flairs, current_emoji_flair_list)  # Adds 'checked' status to objects
 
@@ -109,9 +109,27 @@ def set_flair_url(request):
         return HttpResponse('No reddit account is attached to this login. (Shadowbanned or Site-Administrator)')
 
 
-def _pick_present_flair(username, custom_flairs):
+def _pick_present_flair(username, custom_flairs, current_flairs):
     present_flair_name = "??????"
-    # Don't do anything if they already have one assigned.
+    # If they have one assigned (set), compare against what they have awarded (available).
+    for assigned_flair in current_flairs:
+        if assigned_flair.display_name != present_flair_name:
+            continue
+        # They have one assigned, compare against awarded.
+        for flair_type in custom_flairs:
+            if flair_type.flair_id.display_name != present_flair_name:
+                continue
+            # Found an awarded flair that is a present, change to the assigned one.
+            if flair_type.flair_id != assigned_flair:
+                flair_type.flair_id = assigned_flair
+                flair_type.save()
+            return
+        # They *don't* have one awarded, so award the assigned one now.
+        awarded = FlairsAwarded.objects.create(flair_id=assigned_flair, display_name=username)
+        custom_flairs.append(awarded)
+        return
+
+    # Don't do anything if they already have one awarded.
     for flair_type in custom_flairs:
         if flair_type.flair_id.display_name == present_flair_name:
             return

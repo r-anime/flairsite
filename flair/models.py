@@ -21,14 +21,13 @@ class FlairType(models.Model):
     wiki_display = models.BooleanField(default=False)
     wiki_title = models.CharField("Title of the flair displayed on the wiki", default="", max_length=255, blank=True)
     wiki_text = models.CharField("Information displayed on the flair wiki page", default="", max_length=65536, blank=True)
-    static_image = models.CharField("Server image path. Used by wiki page", default="", max_length=255, blank=True)
 
     def __str__(self):
         return self.display_name
 
 
 class FlairsAwarded(models.Model):
-    flair_id = models.ForeignKey(FlairType, limit_choices_to=Q(flair_type='achievement') | Q(flair_type='custom') | Q(flair_type='tiered-award'), null=True, on_delete=models.SET_NULL)  # Links to what flair, or null if somehow deleted
+    flair_id = models.ForeignKey(FlairType, limit_choices_to=Q(flair_type='achievement') | Q(flair_type='custom') | Q(flair_type='temporary'), null=True, on_delete=models.SET_NULL)  # Links to what flair, or null if somehow deleted
     display_name = models.CharField("A reddit username", max_length=20)  # Reddit names can be max 20 characters
     date_added = models.DateTimeField(default=timezone.now, blank=True)
     note = models.CharField("An optional note on why this was awarded", default="", max_length=255, blank=True)
@@ -44,9 +43,11 @@ class FlairAssigned(models.Model):
     flair_id = models.ForeignKey(FlairType, null=True, on_delete=models.SET_NULL)
     date_added = models.DateTimeField(default=timezone.now, blank=True)
 
+    class Meta:
+        verbose_name = "Currently set flair"
+
     def __str__(self):
         return "{}: {}".format(self.reddit_username, self.flair_id)
-
 
 
 class ActionLogging(models.Model):
