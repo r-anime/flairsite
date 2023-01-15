@@ -16,11 +16,17 @@
         {% if general_flairs|length > 1 %}
         <div class="row">
             <div class="col-xl">
-                <div class="section-title-grey">Select <span class="section-title-emphasis">one</span> General flair:</div>
-
+                <div class="flair-list d-flex flex-row flex-wrap">
+                    <div class="section-title-grey flex-fill">Select <span class="section-title-emphasis">one</span> General flair:</div>
+                    <div class="flex-fill search-box"><input id="search-box" type="text" placeholder="Search..." onkeyup="searchGeneralFlairs()"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl">
                 <div class="flair-list d-flex flex-row flex-wrap">
                 {% for flair_general in general_flairs %}
-                    <div class="list-card list-card-general flex-fill">
+                    <div class="list-card list-card-general flex-fill" data-flair-name="{{flair_general.display_name}}">
                         {%if flair_general.checked == True %}
                         <input type="radio" id="flairChoice{{flair_general.id}}"
                                name="generalflair" value="{{flair_general.id}}"
@@ -80,30 +86,30 @@
                 <div class="section-title-grey">Select up to <span class="section-title-emphasis">two</span> Achievement flairs:</div>
         
                 <div class="flair-list d-flex flex-row flex-wrap">
-                        {% for flair_awarded in allowed_flairs %}
-                        <label for="flairChoice{{flair_awarded.flair_id.id}}">
-                        <div class="list-card">
-                            {%if flair_awarded.flair_id.checked == True %}
-                            <input class="input-check" type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
-                                name="flairtype_{{flair_awarded.flair_id.display_name}}" value="{{flair_awarded.flair_id.display_name}}"
-                                checked="checked">
-                            {% else %}
-                            <input class="input-check" type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
-                                name="flairtype_{{flair_awarded.flair_id.display_name}}" value="{{flair_awarded.flair_id.display_name}}">
-                            {% endif %}
+                    {% for flair_awarded in allowed_flairs %}
+                    <label for="flairChoice{{flair_awarded.flair_id.id}}">
+                    <div class="list-card">
+                        {%if flair_awarded.flair_id.checked == True %}
+                        <input class="input-check" type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
+                            name="flairtype_{{flair_awarded.flair_id.display_name}}" value="{{flair_awarded.flair_id.display_name}}"
+                            checked="checked">
+                        {% else %}
+                        <input class="input-check" type="checkbox" id="flairChoice{{flair_awarded.flair_id.id}}"
+                            name="flairtype_{{flair_awarded.flair_id.display_name}}" value="{{flair_awarded.flair_id.display_name}}">
+                        {% endif %}
 
-                            {%if flair_awarded.awarded_count > 1 %}
-                            <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}} (x{{flair_awarded.awarded_count}})</label>
-                            {% else %}
-                            <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}}</label>
-                            {% endif %}
+                        {%if flair_awarded.awarded_count > 1 %}
+                        <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}} (x{{flair_awarded.awarded_count}})</label>
+                        {% else %}
+                        <label for="flairChoice{{flair_awarded.flair_id.id}}">{{flair_awarded.flair_id}}</label>
+                        {% endif %}
 
-                            {% if flair_awarded.flair_id.display_image %}
-                            <img src="{{flair_awarded.flair_id.display_image.url}}" alt="{{flair_awarded.flair_id.display_name}}">
-                            {% endif %}
-                        </div>
-                        </label>
-                        {% endfor %}
+                        {% if flair_awarded.flair_id.display_image %}
+                        <img src="{{flair_awarded.flair_id.display_image.url}}" alt="{{flair_awarded.flair_id.display_name}}">
+                        {% endif %}
+                    </div>
+                    </label>
+                    {% endfor %}
                 </div>
                 {% endif %}
                 

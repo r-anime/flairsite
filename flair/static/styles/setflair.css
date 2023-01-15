@@ -35,13 +35,18 @@
   font-weight: 200;
 }
 
+/* Search */
+.search-box {
+  display: flex;
+  justify-content: right;
+}
 
 /* Lists */
 .list-card label{
   color: #474747;
   margin-left: 8px;
   margin-right: 8px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .list-card {
@@ -61,8 +66,8 @@
   overflow-x: hidden;
   max-height: 50vh;
   /* Stupid scroll views always requiring dirty hacks to make things pretty */
-  margin: 0px -32px;
-  padding: 0px 32px;
+  margin: 0 -32px;
+  padding: 0 32px;
   margin-right: 8px;
 }
 
