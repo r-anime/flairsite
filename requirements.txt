@@ -1,4 +1,4 @@
-Django==3.1.13
+Django==3.1.14
 django-allauth==0.44.0
 praw==7.6.1
 python-dotenv==0.21.0
