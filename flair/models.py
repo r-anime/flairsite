@@ -7,15 +7,29 @@ from django.utils import timezone
 User = get_user_model()
 
 
+class Anime(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    title_jp = models.CharField("Japanese title", max_length=255)
+    title_en = models.CharField("English title", max_length=255)
+    alias = models.CharField("Other aliases", max_length=255, blank=True)
+
+    class Meta:
+        verbose_name_plural = "anime"
+
+    def __str__(self):
+        return self.title_en
+
+
 class FlairType(models.Model):
     id = models.BigAutoField(primary_key=True)
-    display_name = models.CharField("Display name", max_length=64)
+    display_name = models.CharField("Display name", max_length=128)
     display_image = models.ImageField("Display image", upload_to="flair_images")
     reddit_flair_emoji = models.CharField("Emoji that will be added if selected", max_length=64)
     reddit_flair_text = models.CharField("Text that will be added if selected", max_length=64, blank=True)
     reddit_flair_template_id = models.CharField("Reddit's Template ID to set if any", max_length=36, blank=True)
     FLAIR_TYPE_CHOICES = [('general', 'General'), ('custom', 'Custom'), ('list', 'List'), ('achievement', 'Achievement'), ('temporary', 'Temporary'), ('override', 'Override')]
     flair_type = models.CharField("Flairs Type", default="default", choices=FLAIR_TYPE_CHOICES, max_length=255)
+    anime = models.ForeignKey(Anime, blank=True, null=True, on_delete=models.SET_NULL)
     note = models.CharField("An optional note about this flair", default="", max_length=255, blank=True)
     order = models.IntegerField(default=1)  # used to order emojis/flairs when multiple added
     wiki_display = models.BooleanField(default=False)

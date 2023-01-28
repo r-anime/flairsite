@@ -26,7 +26,12 @@
             <div class="col-xl">
                 <div class="flair-list d-flex flex-row flex-wrap">
                 {% for flair_general in general_flairs %}
-                    <div class="list-card list-card-general flex-fill" data-flair-name="{{flair_general.display_name}}">
+                    <div class="list-card list-card-general flex-fill"
+                         data-flair-name="{{flair_general.display_name}}"
+                         data-anime-title-jp="{{flair_general.anime.title_jp}}"
+                         data-anime-title-en="{{flair_general.anime.title_en}}"
+                         data-anime-alias="{{flair_general.anime.alias}}"
+                    >
                         {%if flair_general.checked == True %}
                         <input type="radio" id="flairChoice{{flair_general.id}}"
                                name="generalflair" value="{{flair_general.id}}"
@@ -36,9 +41,25 @@
                                name="generalflair" value="{{flair_general.id}}">
                         {% endif %}
                         {%if flair_general.flair_type == "custom" %}
-                            <label for="flairChoice{{flair_general.id}}" class="type-custom-label">{{flair_general.display_name}}</label>
+                            <label for="flairChoice{{flair_general.id}}" class="type-custom-label">
+                                {{flair_general.display_name}}
+                                {%if flair_general.anime and flair_general.anime.title_en != flair_general.display_name %}
+                                <br/>
+                                <span class="subtitle">
+                                    {{flair_general.anime.title_en}}
+                                </span>
+                                {% endif %}
+                            </label>
                         {% else %}
-                            <label for="flairChoice{{flair_general.id}}">{{flair_general.display_name}}</label>
+                            <label for="flairChoice{{flair_general.id}}">
+                                {{flair_general.display_name}}
+                                {%if flair_general.anime and flair_general.anime.title_en != flair_general.display_name %}
+                                <br/>
+                                <span class="subtitle">
+                                    {{flair_general.anime.title_en}}
+                                </span>
+                                {% endif %}
+                            </label>
                         {% endif %}
                         {%if flair_general.display_image %}
                         <img src="{{flair_general.display_image.url}}" alt="{{flair_general.display_name}}">

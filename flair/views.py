@@ -75,8 +75,8 @@ def set_flair_url(request):
         none_type = FlairType()
         none_type.id = 0
         none_type.display_name = "None"
-        general_flairs = list(FlairType.objects.filter(flair_type__exact="general"))
-        custom_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username).filter(flair_id__flair_type="custom"))
+        general_flairs = list(FlairType.objects.filter(flair_type__exact="general").order_by("anime__title_en"))
+        custom_flairs = list(FlairsAwarded.objects.filter(display_name__iexact=username).filter(flair_id__flair_type="custom").order_by("flair_id__anime__title_en"))
         # Temporary: pick a present flair if they exist.
         _pick_present_flair(username, custom_flairs, current_emoji_flair_list)
         general_flairs = [none_type] + [custom_flair.flair_id for custom_flair in custom_flairs] + general_flairs

@@ -5,7 +5,12 @@ from django.db.models import Count
 from django.utils.html import format_html
 
 
-from .models import FlairType, FlairsAwarded, FlairAssigned, ActionLogging
+from .models import Anime, FlairType, FlairsAwarded, FlairAssigned, ActionLogging
+
+
+class AnimeAdmin(admin.ModelAdmin):
+    list_display = ('title_jp', 'title_en', 'alias')
+    search_fields = ['title_jp', 'title_en', 'alias']
 
 
 class FlairsAwardedAdmin(admin.ModelAdmin):
@@ -43,6 +48,7 @@ class FlairTypeAdmin(admin.ModelAdmin):
         'flair_type',
         'currently_set_count',
         'note',
+        'anime',
         'wiki_display',
         'order',
         'reddit_flair_emoji',
@@ -79,6 +85,7 @@ class ActionLoggingAdmin(admin.ModelAdmin):
     search_fields = ['reddit_name']
 
 
+admin.site.register(Anime, AnimeAdmin)
 admin.site.register(FlairType, FlairTypeAdmin)
 admin.site.register(FlairsAwarded, FlairsAwardedAdmin)
 admin.site.register(FlairAssigned, FlairsAssignedAdmin)
