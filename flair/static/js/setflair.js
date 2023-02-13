@@ -18,7 +18,14 @@ function searchGeneralFlairs(event) {
             const flairList = document.querySelectorAll('.list-card-general');
             for (let flairCard of flairList) {
                 const flairName = flairCard.dataset.flairName.toLowerCase();
-                if (flairName.indexOf(searchText) !== -1) {
+                const titleJp = flairCard.dataset.animeTitleJp.toLowerCase();
+                const titleEn = flairCard.dataset.animeTitleEn.toLowerCase();
+                const alias = flairCard.dataset.animeAlias.toLowerCase();
+                if (flairName.indexOf(searchText) !== -1 ||
+                    titleJp.indexOf(searchText) !== -1 ||
+                    titleEn.indexOf(searchText) !== -1 ||
+                    alias.indexOf(searchText) !== -1
+                ) {
                     flairCard.style.display = 'flex';
                 } else if (flairName !== "none") { // Always display "None" option
                     flairCard.style.display = 'none';

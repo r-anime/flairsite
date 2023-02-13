@@ -53,6 +53,13 @@
   margin-right: 8px;
 }
 
+.list-card label .subtitle{
+  color: #999999;
+  font-size: small;
+  font-weight: normal;
+  font-style: italic;
+}
+
 .list-card-general {
   min-width: 300px;
 }
