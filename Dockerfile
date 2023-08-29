@@ -1,4 +1,4 @@
-FROM python:3.7-alpine AS flair-api
+FROM python:3.7-alpine AS backend
 RUN apk add build-base python3-dev jpeg-dev zlib-dev libffi-dev
 ENV LIBRARY_PATH=/lib:/usr/lib
 
@@ -14,9 +14,9 @@ CMD ["/usr/local/bin/gunicorn", "redoflair.wsgi", "--bind", "0.0.0.0:8000"]
 
 # ---
 
-FROM nginx:alpine AS flair-static
+FROM nginx:alpine AS static
 
-COPY --from=flair-api /app/static /usr/share/nginx/html
+COPY --from=backend /app/static /usr/share/nginx/html
 COPY ./static-nginx.conf /etc/nginx/conf.d/default.conf
 RUN find /usr/share/nginx/html -type f | xargs gzip -k
 EXPOSE 80
