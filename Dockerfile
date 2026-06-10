@@ -1,5 +1,5 @@
-FROM python:3.11-alpine AS backend
-RUN apk add build-base python3-dev jpeg-dev zlib-dev libffi-dev bash
+FROM python:3.7-alpine AS backend
+RUN apk add build-base python3-dev jpeg-dev zlib-dev libffi-dev
 ENV LIBRARY_PATH=/lib:/usr/lib
 
 WORKDIR /app

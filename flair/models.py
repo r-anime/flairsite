@@ -41,7 +41,6 @@ class FlairType(models.Model):
 
 
 class FlairsAwarded(models.Model):
-    id = models.BigAutoField(primary_key=True)
     flair_id = models.ForeignKey(FlairType, limit_choices_to=Q(flair_type='achievement') | Q(flair_type='custom') | Q(flair_type='temporary'), null=True, on_delete=models.SET_NULL)  # Links to what flair, or null if somehow deleted
     display_name = models.CharField("A reddit username", max_length=20)  # Reddit names can be max 20 characters
     date_added = models.DateTimeField(default=timezone.now, blank=True)
@@ -54,7 +53,6 @@ class FlairsAwarded(models.Model):
 
 
 class FlairAssigned(models.Model):
-    id = models.BigAutoField(primary_key=True)
     reddit_username = models.CharField("Reddit Username", max_length=22)
     flair_id = models.ForeignKey(FlairType, null=True, on_delete=models.SET_NULL)
     date_added = models.DateTimeField(default=timezone.now, blank=True)
