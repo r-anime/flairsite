@@ -7,7 +7,7 @@ COPY requirements.txt /app
 RUN pip3 install -r requirements.txt gunicorn --no-cache-dir
 
 COPY . /app
-RUN DJANGO_SECRET_KEY=static SITE_ID=1 python3 ./manage.py collectstatic
+RUN DJANGO_SECRET_KEY=static python3 ./manage.py collectstatic
 EXPOSE 8000
 ENTRYPOINT ["python3"]
 CMD ["/usr/local/bin/gunicorn", "redoflair.wsgi", "--bind", "0.0.0.0:8000"]
